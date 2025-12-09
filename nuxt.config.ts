@@ -4,17 +4,17 @@ import Aura from '@primeuix/themes/aura';
 const MyPreset = definePreset(Aura, {
   semantic: {
     primary: {
-      50: '#DDB976',
-      100: '#DDB976',
-      200: '#DDB976',
-      300: '#DDB976',
-      400: '#DDB976',
-      500: '#DDB976',
-      600: '#DDB976',
-      700: '#DDB976',
-      800: '#DDB976',
-      900: '#DDB976',
-      950: '#DDB976'
+      50: '#966D22',
+      100: '#966D22',
+      200: '#966D22',
+      300: '#966D22',
+      400: '#966D22',
+      500: '#966D22',
+      600: '#966D22',
+      700: '#966D22',
+      800: '#966D22',
+      900: '#966D22',
+      950: '#966D22'
     },
   },
 })
@@ -33,13 +33,14 @@ export default defineNuxtConfig({
       bodyAttrs: {
         dir: 'rtl'
       },
-    }
+    },
+    pageTransition: { name: 'page', mode: 'out-in' },
   },
   modules: [
     '@primevue/nuxt-module'
   ],
   runtimeConfig: {
-    API_BASE_URL: process.env.API_BASE_URL || 'http://api.goldiko.com',
+    API_BASE_URL: process.env.API_BASE_URL || 'http://localhost:9477',
     public: {
       API_BASE_URL: process.env.API_BASE_URL
     },
@@ -53,7 +54,7 @@ export default defineNuxtConfig({
         options: {
           prefix: 'p',
           darkModeSelector: false,
-          cssLayer: false
+       
         }
       }
     }

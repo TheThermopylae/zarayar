@@ -1,198 +1,211 @@
 <template>
   <!-- start -->
-  <div
-    class="text-center bg-white rounded-xl p-3 border border-gray-100"
-    :class="{ '!border-primary': userData._id == props.data._id }"
-  >
+  <!-- :class="{ '!border-primary': userData?._id == props.data?._id }" -->
+  <div class="bg-[#FAFAFA] rounded-xl p-3 border border-strokesec">
     <div class="flex justify-between">
       <div class="flex gap-3 items-center">
         <svg
-          v-if="props.data.role == 'USER'"
-          xmlns="http://www.w3.org/2000/svg"
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
           fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="size-8"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
-          />
-        </svg>
-        <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="32px"
-          height="32px"
-          viewBox="0 0 24 24"
-          v-else
         >
           <path
-            fill="currentColor"
-            d="M12 23C6.443 21.765 2 16.522 2 11V5l10-4l10 4v6c0 5.524-4.443 10.765-10 12M4 6v5a10.58 10.58 0 0 0 8 10a10.58 10.58 0 0 0 8-10V6l-8-3Z"
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M5.625 5.41667C5.625 3.00043 7.58375 1.04167 10 1.04167C12.4162 1.04167 14.375 3.00043 14.375 5.41667C14.375 7.83292 12.4162 9.79167 10 9.79167C7.58375 9.79167 5.625 7.83292 5.625 5.41667Z"
+            fill="black"
           />
-          <circle cx="12" cy="8.5" r="2.5" fill="currentColor" />
           <path
-            fill="currentColor"
-            d="M7 15a5.78 5.78 0 0 0 5 3a5.78 5.78 0 0 0 5-3c-.025-1.896-3.342-3-5-3c-1.667 0-4.975 1.104-5 3"
+            fill-rule="evenodd"
+            clip-rule="evenodd"
+            d="M3.54199 15.4762C3.54199 13.0271 5.5274 11.0417 7.97652 11.0417H12.0241C14.4733 11.0417 16.4587 13.0271 16.4587 15.4762C16.4587 17.3993 14.8997 18.9583 12.9765 18.9583H7.02414C5.101 18.9583 3.54199 17.3993 3.54199 15.4762Z"
+            fill="#BFBFBF"
           />
         </svg>
-        <div class="text-right">
-          <h2 class="text-lg">{{ props.data.phone }}</h2>
-          <p class="text-gray-400">
-            9812
-            <span
-              v-text="props.data.role == 'ADMIN' ? '(ادمین)' : '(کاربر)'"
-            ></span>
-          </p>
-        </div>
+        کمیل ملکی
       </div>
-      <div
-        class="flex items-center justify-between gap-3"
-        v-if="userData._id != props.data._id"
-      >
-        <label class="inline-flex relative items-center cursor-pointer">
-          <input type="checkbox" class="sr-only peer acctSwitch" checked />
-          <div
-            class="w-11 h-6 bg-gray-200 rounded-full peer-checked:bg-[#7AB73E] transition-colors"
-          ></div>
-          <span
-            class="absolute left-0.5 top-0.5 w-5 h-5 bg-white rounded-full shadow peer-checked:translate-x-5 transition-transform"
-          ></span>
-        </label>
+      <!-- v-if="userData?._id != props.data?._id" -->
+      <div class="flex items-center justify-between gap-3">
         <button class="submenu" @click="showMenu = !showMenu">
           <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
+            width="24"
+            height="24"
             viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="size-6"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M2.75 12C2.75 10.7574 3.75736 9.75 5 9.75C6.24264 9.75 7.25 10.7574 7.25 12C7.25 13.2426 6.24264 14.25 5 14.25C3.75736 14.25 2.75 13.2426 2.75 12ZM5 11.25C4.58579 11.25 4.25 11.5858 4.25 12C4.25 12.4142 4.58579 12.75 5 12.75C5.41421 12.75 5.75 12.4142 5.75 12C5.75 11.5858 5.41421 11.25 5 11.25Z"
+              fill="#616161"
+            />
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M9.75 12C9.75 10.7574 10.7574 9.75 12 9.75C13.2426 9.75 14.25 10.7574 14.25 12C14.25 13.2426 13.2426 14.25 12 14.25C10.7574 14.25 9.75 13.2426 9.75 12ZM12 11.25C11.5858 11.25 11.25 11.5858 11.25 12C11.25 12.4142 11.5858 12.75 12 12.75C12.4142 12.75 12.75 12.4142 12.75 12C12.75 11.5858 12.4142 11.25 12 11.25Z"
+              fill="#616161"
+            />
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M16.75 12C16.75 10.7574 17.7574 9.75 19 9.75C20.2426 9.75 21.25 10.7574 21.25 12C21.25 13.2426 20.2426 14.25 19 14.25C17.7574 14.25 16.75 13.2426 16.75 12ZM19 11.25C18.5858 11.25 18.25 11.5858 18.25 12C18.25 12.4142 18.5858 12.75 19 12.75C19.4142 12.75 19.75 12.4142 19.75 12C19.75 11.5858 19.4142 11.25 19 11.25Z"
+              fill="#616161"
             />
           </svg>
         </button>
+        <input
+          type="checkbox"
+          class="toggle-switch"
+        />
       </div>
     </div>
-    <div class="flex justify-between flex-wrap gap-2 mt-5" v-if="showMenu">
-      <div class="flex justify-between gap-3">
-        <div class="bg-gray-200 p-3 rounded-lg">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="size-6"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z"
-            />
-          </svg>
-        </div>
-        <div class="bg-gray-200 p-3 rounded-lg">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="size-6"
-          >
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="M12 4.5v15m7.5-7.5h-15"
-            />
-          </svg>
-        </div>
-        <NuxtLink :to="`/admin/users/auth/${props.data._id}`" class="bg-gray-200 p-3 rounded-lg">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24px"
-            height="24px"
-            viewBox="0 0 24 24"
-          >
-            <g
-              fill="none"
-              stroke="currentColor"
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="1.5"
-            >
-              <path
-                d="M21.25 8.814V6.758a3.083 3.083 0 0 0-3.083-3.083h-3.084m0 18.5h3.084a3.083 3.083 0 0 0 3.083-3.083v-2.056m-18.5 0v2.056a3.083 3.083 0 0 0 3.083 3.083h3.084m0-18.5H5.833A3.083 3.083 0 0 0 2.75 6.758v2.056"
-              />
-              <path
-                d="M18.177 22.175c0-2.92-3.256-5.294-6.177-5.294s-6.176 2.373-6.176 5.294M12 14.234a3.53 3.53 0 1 0 0-7.06a3.53 3.53 0 0 0 0 7.06"
-              />
-            </g>
-          </svg>
-        </NuxtLink>
-      </div>
-      <div class="flex justify-between gap-3">
-        <div
-          class="bg-gray-200 p-3 rounded-lg size-12 flex-center cursor-pointer"
-          @click="changeRule"
+    <div class="pt-2 mt-2 border-t border-strokesec" v-if="showMenu">
+      <ul class="text-sm">
+        <li class="p-2 flex justify-between items-center h-9">
+          آخرین بازدید
+          <span class="flex items-center gap-2">
+            <div class="size-2.5 rounded-full bg-cgreen"></div>
+            آنلاین
+          </span>
+        </li>
+        <li
+          class="p-2 flex justify-between items-center h-9 bg-[#F2F2F2] rounded-10"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="32px"
-            height="32px"
-            viewBox="0 0 24 24"
-            class="flex-shrink-0"
-            v-if="!loadingRole"
+          آخرین معامله
+          <span class="flex items-center gap-2"> 7 ساعت قبل </span>
+        </li>
+        <li class="p-2 flex justify-between items-center h-9">
+          شماره موبایل
+          <span class="flex items-center gap-2">09357559553</span>
+        </li>
+        <li
+          class="p-2 flex justify-between items-center h-9 bg-[#F2F2F2] rounded-10"
+        >
+          کد ملی
+          <span class="flex items-center gap-2">---</span>
+        </li>
+        <li class="p-2 flex justify-between items-center h-9">
+          کد حسابداری
+          <span class="flex items-center gap-2">5236</span>
+        </li>
+        <li
+          class="p-2 flex justify-between items-center h-9 bg-[#F2F2F2] rounded-10"
+        >
+          دسته بندی
+          <span class="flex items-center gap-2">مشتری</span>
+        </li>
+        <li class="p-2 flex justify-between items-center h-9">
+          وضعیت مشتری
+          <span
+            class="border border-cgreen rounded-10 bg-[#96A8254D] text-cgreen px-1 py-0.5"
+            >فعال</span
           >
-            <path
-              fill="currentColor"
-              d="m12.07 18.577l2.407-2.402l-2.408-2.402l-.627.627l1.383 1.383q-1.161.006-2.064-.273q-.903-.28-1.447-.824q-.558-.557-.84-1.265t-.282-1.415q0-.425.094-.85t.274-.806l-.677-.6q-.29.529-.433 1.096T7.308 12q0 .891.346 1.759t1.023 1.555t1.779 1.02t2.263.339l-1.277 1.277zm4.067-4.327q.29-.529.432-1.096T16.712 12q0-.888-.344-1.765t-1.03-1.554q-.667-.687-1.775-1.017q-1.109-.331-2.263-.331l1.277-1.283l-.627-.627l-2.408 2.402l2.408 2.402l.627-.627l-1.388-1.388q1.155 0 2.067.281t1.455.828t.83 1.255t.286 1.418q0 .425-.093.85t-.274.806zM12.003 21q-1.866 0-3.51-.708q-1.643-.709-2.859-1.924t-1.925-2.856T3 12.003t.709-3.51Q4.417 6.85 5.63 5.634t2.857-1.925T11.997 3t3.51.709q1.643.708 2.859 1.922t1.925 2.857t.709 3.509t-.708 3.51t-1.924 2.859t-2.856 1.925t-3.509.709M12 20q3.35 0 5.675-2.325T20 12t-2.325-5.675T12 4T6.325 6.325T4 12t2.325 5.675T12 20m0-8"
-            />
-          </svg>
-          <span v-else>...</span>
-        </div>
+        </li>
+      </ul>
+      <div class="grid grid-cols-2 gap-2 text-xs mt-2">
         <NuxtLink
-          :to="`/admin/users/${props.data._id}`"
-          class="bg-gray-200 p-3 rounded-lg"
+          to="/admin/users/trade/123"
+          class="flex justify-center items-center gap-2 rounded-10 border border-strokesec p-2"
         >
           <svg
-            xmlns="http://www.w3.org/2000/svg"
+            width="14"
+            height="14"
+            viewBox="0 0 14 14"
             fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="size-6"
+            xmlns="http://www.w3.org/2000/svg"
           >
             <path
+              d="M6.9082 0.75L6.90815 13.0662"
+              stroke="#232323"
+              stroke-width="1.5"
               stroke-linecap="round"
-              stroke-linejoin="round"
-              d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L6.832 19.82a4.5 4.5 0 0 1-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 0 1 1.13-1.897L16.863 4.487Zm0 0L19.5 7.125"
+            />
+            <path
+              d="M13.0664 6.90808L0.750254 6.90803"
+              stroke="#232323"
+              stroke-width="1.5"
+              stroke-linecap="round"
             />
           </svg>
+          معامله جدید
         </NuxtLink>
-        <!-- trash -->
-        <button class="bg-gray-200 p-3 rounded-lg" @click="deleteModal = true">
+        <NuxtLink
+          to="/"
+          class="flex justify-center items-center gap-2 rounded-10 border border-strokesec p-2"
+        >
           <svg
-            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 16 16"
             fill="none"
-            viewBox="0 0 24 24"
-            stroke-width="1.5"
-            stroke="currentColor"
-            class="size-6"
+            xmlns="http://www.w3.org/2000/svg"
           >
             <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"
+              d="M10.2354 1.22559C10.87 0.591427 11.8987 0.591191 12.5332 1.22559L14.2119 2.90527C14.8465 3.53988 14.8465 4.56852 14.2119 5.20312L5.51074 13.9053C5.24907 14.1668 4.90586 14.331 4.53809 14.3711L1.67383 14.6836C1.14448 14.7412 0.697337 14.294 0.754883 13.7646L1.06738 10.9004C1.10747 10.5326 1.27164 10.1894 1.5332 9.92773L10.2354 1.22559Z"
+              stroke="#232323"
+              stroke-width="1.5"
+            />
+            <path
+              d="M10.2344 1.22559C10.8689 0.591363 11.8977 0.591256 12.5322 1.22559L14.2119 2.90527C14.8463 3.53978 14.8461 4.56855 14.2119 5.20312L12.8945 6.52051L8.91699 2.54297L10.2344 1.22559Z"
+              stroke="#232323"
+              stroke-width="1.5"
             />
           </svg>
-        </button>
+          ویرایش
+        </NuxtLink>
+        <NuxtLink
+          to="/"
+          class="flex justify-center items-center gap-2 rounded-10 border border-strokesec p-2"
+        >
+          <svg
+            width="15"
+            height="4"
+            viewBox="0 0 15 4"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M0.75 1.9375C0.75 1.28166 1.28166 0.75 1.9375 0.75C2.59334 0.75 3.125 1.28166 3.125 1.9375C3.125 2.59334 2.59334 3.125 1.9375 3.125C1.28166 3.125 0.75 2.59334 0.75 1.9375Z"
+              stroke="#616161"
+              stroke-width="1.5"
+            />
+            <path
+              d="M6.29199 1.9375C6.29199 1.28166 6.82365 0.75 7.47949 0.75C8.13533 0.75 8.66699 1.28166 8.66699 1.9375C8.66699 2.59334 8.13533 3.125 7.47949 3.125C6.82365 3.125 6.29199 2.59334 6.29199 1.9375Z"
+              stroke="#616161"
+              stroke-width="1.5"
+            />
+            <path
+              d="M11.834 1.9375C11.834 1.28166 12.3656 0.75 13.0215 0.75C13.6773 0.75 14.209 1.28166 14.209 1.9375C14.209 2.59334 13.6773 3.125 13.0215 3.125C12.3656 3.125 11.834 2.59334 11.834 1.9375Z"
+              stroke="#616161"
+              stroke-width="1.5"
+            />
+          </svg>
+          بیشتر
+        </NuxtLink>
+        <NuxtLink
+          to="/"
+          class="flex justify-center items-center gap-2 rounded-10 border border-strokesec p-2"
+        >
+          <svg
+            width="18"
+            height="18"
+            viewBox="0 0 18 18"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M2.58144 9.22981L5.45223 10.1968C5.70695 10.2816 5.9453 10.4027 6.16025 10.5548C6.29839 10.6526 6.42687 10.7632 6.54383 10.8853C6.81116 11.1642 7.01829 11.5029 7.143 11.8847L8.11168 14.7505C8.93945 17.2295 12.4267 17.1768 13.2016 14.6978L16.4599 4.23659C16.7759 3.2026 16.4575 2.20353 15.8035 1.54196C15.1453 0.876138 14.1472 0.552161 13.1135 0.878467L2.61666 4.13111C0.150951 4.90471 0.115732 8.40347 2.58144 9.22981Z"
+              stroke="#232323"
+              stroke-width="1.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
+          ارسال پیامک
+        </NuxtLink>
       </div>
     </div>
     <Dialog v-model:visible="deleteModal" modal header="حذف کاربر">

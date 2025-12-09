@@ -1,72 +1,66 @@
 <template>
   <article class="border border-gray-300 rounded-10 p-3 mb-2 last:m-0">
-    <div class="flex justify-between text-sm font-bold">
-      <div>
-        <h4 v-if="props.data.itemType == 'gold'">طلا</h4>
-        <h4 v-else-if="props.data.itemType == 'coin'">سکه</h4>
-        <h4 v-else>نقره</h4>
-      </div>
-      <h4 class="text-yellow-500" v-if="props.data.status == 'pending'">
-        در حال بررسی
-      </h4>
-      <h4 class="text-green-500" v-else-if="props.data.status == 'confirmed'">
-        تایی شده
-      </h4>
-      <h4 class="text-red-500" v-else>رد شده</h4>
-    </div>
-    <div class="grid grid-cols-2 gap-2 my-3">
-      <div class="flex items-center gap-2">
+    <div class="flex justify-between text-sm border-b border-stroke mb-2 pb-2">
+      <div class="flex items-center gap-2 font-bold text-graydark text-xs">
         <svg
+          width="20"
+          height="20"
+          viewBox="0 0 20 20"
+          fill="none"
           xmlns="http://www.w3.org/2000/svg"
-          width="20px"
-          height="20px"
-          viewBox="0 0 24 24"
-        >
-          <g
-            fill="none"
-            stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
-          >
-            <circle cx="12" cy="5" r="3" />
-            <path
-              d="M6.5 8a2 2 0 0 0-1.905 1.46L2.1 18.5A2 2 0 0 0 4 21h16a2 2 0 0 0 1.925-2.54L19.4 9.5A2 2 0 0 0 17.48 8Z"
-            />
-          </g>
-        </svg>
-        وزن: {{ props.data.weight }}
-      </div>
-      <div class="flex items-center gap-2">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="20px"
-          height="20px"
-          viewBox="0 0 16 16"
         >
           <path
-            fill="currentColor"
-            d="M8 8.5c3.85 0 7 2.5 7 4.5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2c0-2 3.15-4.5 7-4.5M8 10c-1.61 0-3.064.526-4.092 1.234C2.798 12.001 2.5 12.733 2.5 13a.5.5 0 0 0 .5.5h10a.5.5 0 0 0 .5-.5c0-.267-.297-1-1.408-1.766C11.064 10.526 9.609 10 8 10m0-9a3.5 3.5 0 1 1 0 7a3.5 3.5 0 0 1 0-7m0 1.5a2 2 0 1 0 0 4a2 2 0 0 0 0-4"
+            d="M12.756 3.75H4.41239C2.66585 3.75 1.25 5.24238 1.25 7.08333V8.75M1.25 8.75V12.9167C1.25 14.7576 2.66585 16.25 4.41239 16.25H13.7019C15.3393 16.25 16.6667 14.8509 16.6667 13.125V12.2461M1.25 8.75H12.756"
+            stroke="#616161"
+            stroke-width="1.5"
+            stroke-linecap="round"
+          />
+          <path
+            d="M16.6666 4.16669L16.6666 9.58335M16.6666 4.16669L18.7499 6.25002M16.6666 4.16669L14.5833 6.25002"
+            stroke="#616161"
+            stroke-width="1.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
           />
         </svg>
-        دریافت کننده: {{ props.data.receiverName }}
+        حواله {{ props.data.weight }} گرم
       </div>
-      <p class="col-span-2">توضیحات: {{ props.data.description }}</p>
+      <div class="text-2sm flex items-center gap-2">
+        <span class="bg-[#EFEFEF] text-graydark px-2 py-1 rounded-10"
+          >1404/05/13</span
+        >
+        <h4
+          class="bg-pending text-[#966D22] px-2 py-1 rounded-10"
+          v-if="props.data.status == 'pending'"
+        >
+          در حال بررسی
+        </h4>
+        <h4
+          class="bg-confirmed px-2 py-1 rounded-10"
+          v-else-if="props.data.status == 'confirmed'"
+        >
+          تایی شده
+        </h4>
+        <h4 class="bg-reject px-2 py-1 rounded-10" v-else>رد شده</h4>
+      </div>
     </div>
-    <Image
-      :src="`${config.public.API_BASE_URL}${props.data?.file}`"
-      alt="Image"
-      pt:root="!size-20"
-      pt:image="!rounded-10"
-      preview
-    />
+    <div class="grid grid-cols-2 gap-2 text-sm text-graydark">
+      <h4>
+        گیرنده حواله:
+        <span class="font-bold">{{ props.data.receiverName }}</span>
+      </h4>
+      <h4>
+        نزد:
+        <span class="font-bold">{{ userData.lname }}</span>
+      </h4>
+    </div>
   </article>
 </template>
 
 <script setup>
 let props = defineProps(['data'])
 
-let config = useRuntimeConfig()
+let { userData } = userAuth()
 </script>
 
 <style>

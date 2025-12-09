@@ -1,8 +1,8 @@
 <template>
-  <div class="container">
-    <div class="max-w-[640px] m-auto pb-24">
+  <div>
+    <MainHeader />
+    <div class="max-w-[640px] m-auto p-3">
       <slot />
     </div>
-    <NavLinks />
   </div>
 </template>

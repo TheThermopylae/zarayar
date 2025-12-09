@@ -1,11 +1,13 @@
 <template>
-  <NuxtLayout>
-    <NuxtPage />
-  </NuxtLayout>
+  <div>
+    <NuxtLayout name="admin">
+      <NuxtPage />
+    </NuxtLayout>
+  </div>
 </template>
 
 <script setup>
 definePageMeta({
-  layout: 'admin'
+  layout: false
 })
 </script>

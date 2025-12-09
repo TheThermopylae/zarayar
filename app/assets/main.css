@@ -259,9 +259,6 @@
     src: url(../fonts/fa-brands-400.woff) format("woff")
 }
 
-
-
-
 @font-face {
     font-family: anj;
     font-style: normal;
@@ -272,8 +269,25 @@
 
 @theme {
     --font-sans: 'IRANSansX';
-    --color-primary: #DDB976;
+
+    --color-primary: #966D22;
+    --color-secondary: #DDB976;
+
+    --color-cgreen: #96A825;
+    --color-cred: #E84362;
+    --color-stroke: #0000001A;
+    --color-strokesec: #00000033;
+    --color-graydark: #616161;
+    --color-pending: #F8E9CA;
+    --color-confirm: #E7F2A7;
+    --color-reject: #E8436280;
+    --color-reject: #E8436280;
+
+    --color-main: #F4F4F4;
+
     --radius-10: 10px;
+
+    --text-2sm: 10px;
 }
 
 @utility container {
@@ -302,16 +316,32 @@
 }
 
 body {
-    background: #f3f6f8;
     min-height: 100vh;
+    color: #616161;
 }
 
 button {
     cursor: pointer;
 }
 
+.req {
+    @apply after:content-['*'] after:text-red-500
+}
+
+.toggle-switch {
+    @apply toggle border-[#BFBFBF] bg-[#BFBFBF] checked:border-[#7AB73E] checked:bg-[#7AB73E] text-white
+}
+
+.checkbox-c {
+    @apply checkbox checkbox-accent text-white;
+}
+
 .flex-center {
     @apply flex justify-center items-center
+}
+
+.cinput {
+    @apply border border-strokesec rounded-10 p-2 w-full bg-white
 }
 
 /* primevue styles */
@@ -319,8 +349,29 @@ button {
     @apply !w-[90%] !max-w-[450px]
 }
 
+.p-toast {
+    @apply !w-[90%] !max-w-[400px]
+}
+
+.p-button {
+    border-radius: 10px !important;
+    border: none !important;
+    transition: all 150ms;
+}
+
+.p-button:hover {
+    opacity: .9;
+}
+
+.p-drawer {
+    @apply !rounded-t-2xl !text-graydark
+}
+
 :root {
-    --color-primary: #DDB976;
+    --color-primary: #966D22;
+    --color-secondary: #DDB976;
+    --color-accent: #96A825;
+
     --p-select-option-selected-color: white !important;
     --p-select-option-selected-focus-color: white !important;
 }
@@ -332,4 +383,22 @@ input[type=number]::-webkit-outer-spin-button {
 
 input[type=number] {
     -moz-appearance: textfield;
+}
+
+.vpd-input-group {
+    flex-direction: row-reverse !important;
+    background: #F5F7FA !important;
+    border-radius: 0 10px 10px 0 !important;
+}
+
+.vpd-icon-btn {
+    border-radius: 10px 0 0 10px !important;
+    width: 40px !important;
+}
+
+.form-control {
+    background: white !important;
+    border: 1px solid #00000026 !important;
+    height: 40px !important;
+    border-radius: 0 10px 10px 0 !important;
 }

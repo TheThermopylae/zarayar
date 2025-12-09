@@ -1,7 +1,6 @@
 <template>
-  <TitleSection title="ارسال مدارک" />
-  <main class="bg-white rounded-2xl p-5 space-y-5">
-    <div class="grid grid-cols-2 gap-3 text-center">
+  <main class="space-y-3">
+    <ClientOnly>
       <AdminUsersUploadFrontId
         :img="showFrontCardImg"
         @selectedFile="selectCardFront"
@@ -18,18 +17,26 @@
         :img="showPermission"
         @selectedFile="selectPermission"
       />
-    </div>
-    <Button
-      label="ارسال"
-      pt:root="!w-full"
-      @click="sendData"
-      :loading="loading"
-    />
-    <Toast />
+      <Button
+        label="ارسال"
+        pt:root="!w-full"
+        @click="sendData"
+        :loading="loading"
+      />
+      <Toast />
+    </ClientOnly>
   </main>
 </template>
 
 <script setup>
+useHead({
+  title: 'احراز هویت |'
+})
+
+definePageMeta({
+  title: 'احراز هویت'
+})
+
 let { showToast } = useToastComp()
 let route = useRoute()
 

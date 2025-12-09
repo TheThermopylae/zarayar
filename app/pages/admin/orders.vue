@@ -1,5 +1,4 @@
 <template>
-  <TitleSection title="مدیریت معامله ها" />
   <section class="rounded-10 p-3 bg-white">
     <AdminOrdersOrderCard
       v-for="item in data"
@@ -7,18 +6,24 @@
       :data="item"
       @success="successFunc"
     />
+    <Toast />
   </section>
-  <Toast />
 </template>
 
 <script setup>
+useHead({
+  title: 'خرید و فروش ها |'
+})
+
+definePageMeta({
+  title: 'خرید و فروش ها'
+})
+
 let { showToast } = useToastComp()
 
 let { data, refresh } = await useFetch('/api/admin/orders/getOrders', {
   credentials: 'include'
 })
-
-console.log(data.value)
 
 async function successFunc () {
   await refresh()

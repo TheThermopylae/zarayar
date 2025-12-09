@@ -1,98 +1,163 @@
 <template>
-  <TitleSection title="احراز هویت" />
-
-  <main class="bg-white rounded-2xl p-5 space-y-5">
-    <div class="grid grid-cols-2 gap-3 text-center">
-      <button
-        class="flex flex-col justify-center items-center gap-2 border border-gray-300 rounded-xl py-4 hover:bg-gray-50 transition"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="3rem"
-          height="3rem"
-          viewBox="0 0 24 24"
-        >
-          <path
-            fill="currentColor"
-            d="M14.154 12.462h4.077v-1h-4.077zm0-2.77h4.077v-1h-4.077zm-8.385 5.616h6.616v-.166q0-.875-.88-1.355t-2.428-.48t-2.429.48t-.879 1.355zm3.308-3.616q.633 0 1.066-.433q.434-.434.434-1.067t-.434-1.066t-1.066-.434t-1.066.434t-.434 1.066t.434 1.067t1.066.433M4.616 19q-.691 0-1.153-.462T3 17.384V6.616q0-.691.463-1.153T4.615 5h14.77q.69 0 1.152.463T21 6.616v10.769q0 .69-.463 1.153T19.385 19zm0-1h14.769q.23 0 .423-.192t.192-.424V6.616q0-.231-.192-.424T19.385 6H4.615q-.23 0-.423.192T4 6.616v10.769q0 .23.192.423t.423.192M4 18V6z"
-          />
-        </svg>
-        <span class="text-sm text-gray-700">تصویر روی کارت ملی</span>
-      </button>
-
-      <button
-        class="flex flex-col justify-center items-center gap-2 border border-gray-300 rounded-xl py-4 hover:bg-gray-50 transition"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="3rem"
-          height="3rem"
-          viewBox="0 0 24 24"
-        >
-          <path
-            fill="currentColor"
-            d="M14.154 12.462h4.077v-1h-4.077zm0-2.77h4.077v-1h-4.077zm-8.385 5.616h6.616v-.166q0-.875-.88-1.355t-2.428-.48t-2.429.48t-.879 1.355zm3.308-3.616q.633 0 1.066-.433q.434-.434.434-1.067t-.434-1.066t-1.066-.434t-1.066.434t-.434 1.066t.434 1.067t1.066.433M4.616 19q-.691 0-1.153-.462T3 17.384V6.616q0-.691.463-1.153T4.615 5h14.77q.69 0 1.152.463T21 6.616v10.769q0 .69-.463 1.153T19.385 19zm0-1h14.769q.23 0 .423-.192t.192-.424V6.616q0-.231-.192-.424T19.385 6H4.615q-.23 0-.423.192T4 6.616v10.769q0 .23.192.423t.423.192M4 18V6z"
-          />
-        </svg>
-        <span class="text-sm text-gray-700">تصویر پشت کارت ملی</span>
-      </button>
-
-      <button
-        class="flex flex-col justify-center items-center gap-2 border border-gray-300 rounded-xl py-4 hover:bg-gray-50 transition"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="3rem"
-          height="3rem"
-          viewBox="0 0 24 24"
-        >
-          <path
-            fill="currentColor"
-            d="M14.154 12.462h4.077v-1h-4.077zm0-2.77h4.077v-1h-4.077zm-8.385 5.616h6.616v-.166q0-.875-.88-1.355t-2.428-.48t-2.429.48t-.879 1.355zm3.308-3.616q.633 0 1.066-.433q.434-.434.434-1.067t-.434-1.066t-1.066-.434t-1.066.434t-.434 1.066t.434 1.067t1.066.433M4.616 19q-.691 0-1.153-.462T3 17.384V6.616q0-.691.463-1.153T4.615 5h14.77q.69 0 1.152.463T21 6.616v10.769q0 .69-.463 1.153T19.385 19zm0-1h14.769q.23 0 .423-.192t.192-.424V6.616q0-.231-.192-.424T19.385 6H4.615q-.23 0-.423.192T4 6.616v10.769q0 .23.192.423t.423.192M4 18V6z"
-          />
-        </svg>
-        <span class="text-sm text-gray-700">تصویر روی کارت ملی</span>
-      </button>
-
-      <button
-        class="flex flex-col justify-center items-center gap-2 border border-gray-300 rounded-xl py-4 hover:bg-gray-50 transition"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="3rem"
-          height="3rem"
-          viewBox="0 0 24 24"
-        >
-          <path
-            fill="currentColor"
-            d="M14.154 12.462h4.077v-1h-4.077zm0-2.77h4.077v-1h-4.077zm-8.385 5.616h6.616v-.166q0-.875-.88-1.355t-2.428-.48t-2.429.48t-.879 1.355zm3.308-3.616q.633 0 1.066-.433q.434-.434.434-1.067t-.434-1.066t-1.066-.434t-1.066.434t-.434 1.066t.434 1.067t1.066.433M4.616 19q-.691 0-1.153-.462T3 17.384V6.616q0-.691.463-1.153T4.615 5h14.77q.69 0 1.152.463T21 6.616v10.769q0 .69-.463 1.153T19.385 19zm0-1h14.769q.23 0 .423-.192t.192-.424V6.616q0-.231-.192-.424T19.385 6H4.615q-.23 0-.423.192T4 6.616v10.769q0 .23.192.423t.423.192M4 18V6z"
-          />
-        </svg>
-        <span class="text-sm text-gray-700">تصویر صفحه اول شناسنامه</span>
-      </button>
-
-      <button
-        class="col-span-2 flex flex-col justify-center items-center gap-2 border border-gray-300 rounded-xl py-4 hover:bg-gray-50 transition"
-      >
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="3rem"
-          height="3rem"
-          viewBox="0 0 24 24"
-        >
-          <path
-            fill="currentColor"
-            d="M14.154 12.462h4.077v-1h-4.077zm0-2.77h4.077v-1h-4.077zm-8.385 5.616h6.616v-.166q0-.875-.88-1.355t-2.428-.48t-2.429.48t-.879 1.355zm3.308-3.616q.633 0 1.066-.433q.434-.434.434-1.067t-.434-1.066t-1.066-.434t-1.066.434t-.434 1.066t.434 1.067t1.066.433M4.616 19q-.691 0-1.153-.462T3 17.384V6.616q0-.691.463-1.153T4.615 5h14.77q.69 0 1.152.463T21 6.616v10.769q0 .69-.463 1.153T19.385 19zm0-1h14.769q.23 0 .423-.192t.192-.424V6.616q0-.231-.192-.424T19.385 6H4.615q-.23 0-.423.192T4 6.616v10.769q0 .23.192.423t.423.192M4 18V6z"
-          />
-        </svg>
-        <span class="text-sm text-gray-700">تصویر جواز کسب</span>
-      </button>
-    </div>
-
-    <button
-      class="w-full py-3 rounded-xl bg-[#68C4FD] text-white font-medium text-base hover:bg-[#5ab5ec] transition"
-    >
-      ارسال
-    </button>
+  <main class="space-y-3">
+    <ClientOnly>
+      <AdminUsersUploadFrontId
+        :img="showFrontCardImg"
+        @selectedFile="selectCardFront"
+      />
+      <AdminUsersUploadBackId
+        :img="showBackCardImg"
+        @selectedFile="selectCardBack"
+      />
+      <AdminUsersUploadBrthcertificate
+        :img="showCertificateImg"
+        @selectedFile="selectCertificate"
+      />
+      <AdminUsersUploadPermissionCard
+        :img="showPermission"
+        @selectedFile="selectPermission"
+      />
+      <Button
+        label="ارسال"
+        pt:root="!w-full"
+        @click="sendData"
+        :loading="loading"
+      />
+      <Toast />
+    </ClientOnly>
   </main>
 </template>
+
+<script setup>
+useHead({
+  title: 'احراز هویت |'
+})
+
+definePageMeta({
+  title: 'احراز هویت'
+})
+
+let { showToast } = useToastComp()
+let route = useRoute()
+
+let data = reactive({
+  nationalCardFront: '',
+  nationalCardBack: '',
+  birthcertificate: '',
+  businessLicense: ''
+})
+
+let showFrontCardImg = ref('')
+let showBackCardImg = ref('')
+let showCertificateImg = ref('')
+let showPermission = ref('')
+
+function selectCardFront (item) {
+  if (!item) return
+
+  data.nationalCardFront = item
+
+  if (item instanceof File) {
+    const reader = new FileReader()
+
+    reader.onload = e => {
+      showFrontCardImg.value = e.target.result
+    }
+
+    reader.readAsDataURL(item)
+  } else if (typeof item === 'string') {
+    showFrontCardImg.value = item
+  }
+}
+
+function selectCardBack (item) {
+  if (!item) return
+
+  data.nationalCardBack = item
+
+  if (item instanceof File) {
+    const reader = new FileReader()
+
+    reader.onload = e => {
+      showBackCardImg.value = e.target.result
+    }
+
+    reader.readAsDataURL(item)
+  } else if (typeof item === 'string') {
+    showBackCardImg.value = item
+  }
+}
+
+function selectCertificate (item) {
+  if (!item) return
+
+  data.birthcertificate = item
+
+  if (item instanceof File) {
+    const reader = new FileReader()
+
+    reader.onload = e => {
+      showCertificateImg.value = e.target.result
+    }
+
+    reader.readAsDataURL(item)
+  } else if (typeof item === 'string') {
+    showCertificateImg.value = item
+  }
+}
+
+function selectPermission (item) {
+  if (!item) return
+
+  data.businessLicense = item
+
+  if (item instanceof File) {
+    const reader = new FileReader()
+
+    reader.onload = e => {
+      showPermission.value = e.target.result
+    }
+
+    reader.readAsDataURL(item)
+  } else if (typeof item === 'string') {
+    showPermission.value = item
+  }
+}
+
+let loading = ref(false)
+
+async function sendData () {
+  try {
+    if (
+      !data.nationalCardFront ||
+      !data.nationalCardBack ||
+      !data.birthcertificate ||
+      !data.businessLicense
+    )
+      showToast('warn', 'اخطار', 'باید تمامی تصاویر خواسته شده را وارد کنید')
+    else {
+      loading.value = true
+
+      let formData = new FormData()
+
+      formData.append('id', route.params.id)
+      formData.append('nationalCardFront', data.nationalCardFront)
+      formData.append('nationalCardBack', data.nationalCardBack)
+      formData.append('birthcertificate', data.birthcertificate)
+      formData.append('businessLicense', data.businessLicense)
+
+      let result = await $fetch('/api/admin/auth/sendAuth', {
+        credentials: 'include',
+        method: 'POST',
+        body: formData
+      })
+
+      showToast(result.message)
+    }
+  } catch (err) {
+    showToast('error', 'خطا', err.message)
+  } finally {
+    loading.value = false
+  }
+}
+</script>
