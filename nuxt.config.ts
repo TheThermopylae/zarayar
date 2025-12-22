@@ -34,7 +34,7 @@ export default defineNuxtConfig({
         dir: 'rtl'
       },
       link: [
-        { rel: 'icon', href: '/favicon.svg' }
+        { rel: 'icon', href: '/favicon.png' }
       ]
     },
     pageTransition: { name: 'page', mode: 'out-in' },
