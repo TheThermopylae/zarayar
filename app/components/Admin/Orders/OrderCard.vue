@@ -1,5 +1,5 @@
 <template>
-  <article class="p-2 border border-strokesec rounded-10 text-xs mb-2 last:m-0">
+  <article class="p-2 border border-strokesec rounded-10 text-xs">
     <div
       class="flex items-center justify-between border-b border-strokesec pb-2 mb-2"
     >
@@ -37,17 +37,25 @@
     <ul>
       <li class="h-10 flex justify-between items-center p-2">
         وزن
-        <p><span class="font-bold">15</span> گرم</p>
+        <p>
+          <span class="font-bold">{{ data.weightGram }}</span> گرم
+        </p>
       </li>
       <li
         class="h-10 flex justify-between items-center p-2 bg-[#F6F6F6] rounded-10"
       >
         مظنه
-        <p><span class="font-bold">5,000,000</span> ریال</p>
+        <p>
+          <span class="font-bold">{{ data.unitPrice.toLocaleString() }}</span>
+          ریال
+        </p>
       </li>
       <li class="h-10 flex justify-between items-center p-2">
         مبلغ کل
-        <p><span class="font-bold">10,000,000</span> ریال</p>
+        <p>
+          <span class="font-bold">1{{ data.unitPrice.toLocaleString() }}</span>
+          ریال
+        </p>
       </li>
       <li
         class="h-10 flex justify-between items-center p-2 bg-[#F6F6F6] rounded-10"
@@ -69,15 +77,37 @@
       >
         وضعیت معامله
         <span
+          v-if="data.status == 'pending'"
           class="bg-[#DDB9764D] border border-[#D5AA51] rounded text-[#966D22] p-1"
           >در انتظار تایید</span
+        >
+        <span
+          v-else-if="data.status == 'confirmed'"
+          class="bg-[#84dd764d] border border-[#2a8536] rounded text-[#2a8536] p-1"
+          >تایید شده</span
+        >
+        <span
+          v-else
+          class="bg-[#dd76764d] border border-[#852a2a] rounded text-[#852a2a] p-1"
+          >رد شده</span
         >
       </li>
     </ul>
     <div class="grid grid-cols-3 gap-3 mt-3">
-      <button class="bg-cgreen p-2 rounded-10 text-white">تایید</button>
-      <button class="bg-[#E84362] p-2 rounded-10 text-white">لغو</button>
       <button
+        class="bg-cgreen p-2 rounded-10 text-white"
+        @click="changeOrder('confirmed')"
+      >
+        تایید
+      </button>
+      <button
+        class="bg-[#E84362] p-2 rounded-10 text-white"
+        @click="changeOrder('rejected')"
+      >
+        لغو
+      </button>
+      <button
+        @click="showInput = !showInput"
         class="flex justify-center items-center gap-1 border border-[#E84362] text-[#E84362] rounded-10 p-2"
       >
         به دلیل
@@ -87,6 +117,7 @@
           viewBox="0 0 18 18"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
+          :class="{ 'rotate-180': showInput }"
         >
           <path
             fill-rule="evenodd"
@@ -96,6 +127,13 @@
           />
         </svg>
       </button>
+      <input
+        type="text"
+        class="cinput col-span-3"
+        placeholder="دلیل رد کردن سفارش را بنویسید"
+        v-if="showInput"
+        v-model="rejectedtxt"
+      />
     </div>
   </article>
 </template>
@@ -103,8 +141,11 @@
 <script setup>
 let props = defineProps(['data'])
 let emit = defineEmits(['success', 'error'])
-
+    
 let loading = ref(false)
+
+let showInput = ref(false)
+let rejectedtxt = ref('')
 
 async function changeOrder (status) {
   loading.value = true
@@ -113,12 +154,15 @@ async function changeOrder (status) {
     let data = await $fetch('/api/admin/orders/changeOrder', {
       credentials: 'include',
       method: 'POST',
-      body: { id: props.data._id, status }
+      body:
+        status == 'confirmed'
+          ? { id: props.data._id, status }
+          : { id: props.data._id, status, rejectedtxt: rejectedtxt.value }
     })
 
     emit('success')
   } catch (err) {
-    emit('error')
+    emit('error',err.msg)
   } finally {
     loading.value = false
   }

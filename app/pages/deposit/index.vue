@@ -3,21 +3,17 @@
     <div>
       <!-- فرم ارسال -->
       <div class="bg-[#FAFAFA] rounded-2xl p-4 border border-[#0000001A] mb-5">
-        <FishUploadPic @selectedFile="selectFileFunc"></FishUploadPic>
-        <Image
-          :src="showImg"
-          preview
-          class="mt-3"
-          pt:root="!size-20"
-          pt:image="!rounded"
-          v-if="showImg"
-        />
+        <FishUploadPic
+          @selectedFile="selectFileFunc"
+          :img="showImg"
+        ></FishUploadPic>
+
         <div class="mt-3">
           <input
             id="title"
             type="text"
             placeholder="عنوان"
-            class="w-full bg-white border border-stroke rounded-xl py-3 px-4 text-sm text-slate-700 focus:outline-none text-right"
+            class="w-full bg-white border border-stroke rounded-xl py-3 px-4 text-sm text-slate-700 placeholder:text-slate-700 focus:outline-none text-right"
             v-model="form.title"
           />
         </div>
@@ -27,13 +23,13 @@
             id="desc"
             placeholder="توضیحات"
             rows="4"
-            class="w-full bg-white border border-stroke rounded-xl py-3 px-4 text-sm text-slate-700 focus:outline-none resize-none text-right"
+            class="w-full bg-white border border-stroke rounded-xl py-3 px-4 text-sm text-slate-700 placeholder:text-slate-700 focus:outline-none resize-none text-right"
             v-model="form.description"
           ></textarea>
         </div>
         <div class="mt-4">
           <Button
-            class="w-full !rounded-xl !bg-[#83BCFF] !text-black !border-none"
+            class="w-full !rounded-xl !bg-secondary"
             label="ارسال"
             :loading="loading"
             @click="submitFish"

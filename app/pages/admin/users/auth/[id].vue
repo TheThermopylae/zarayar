@@ -1,12 +1,11 @@
 <template>
-  <TitleSection :title="`احراز هویت ${verify.phone}`" />
-  <NuxtLink
-    v-if="verify.verified != 'approved'"
-    :to="`/admin/users/auth/send-pics/${route.params.id}`"
-    class="block m-auto mb-3 bg-green-100 text-green-500 px-3 py-1 rounded border border-green-500 w-fit"
-    >آپلود مدارک</NuxtLink
-  >
   <main class="bg-white rounded-2xl p-5 space-y-3">
+    <NuxtLink
+      v-if="verify.verified == 'pending'"
+      :to="`/admin/users/auth/send-pics/${route.params.id}`"
+      class="block m-auto mb-3 bg-green-100 text-green-500 px-3 py-1 rounded border border-green-500 w-fit"
+      >آپلود مدارک</NuxtLink
+    >
     <div class="grid grid-cols-2 items-center">
       <label>وضعیت احراز:</label>
       <Select
@@ -75,6 +74,14 @@
 </template>
 
 <script setup>
+useHead({
+  title: `احراز هویت کاربر |`
+})
+
+definePageMeta({
+  title: 'احراز هویت کاربر'
+})
+
 let { showToast } = useToastComp()
 let route = useRoute()
 let config = useRuntimeConfig()
@@ -84,6 +91,8 @@ let { data: verify, refresh } = await useFetch('/api/admin/auth/verification', {
   method: 'POST',
   body: { id: route.params.id }
 })
+
+console.log(verify.value)
 
 let authStatus = ['approved', 'pending', 'rejected']
 

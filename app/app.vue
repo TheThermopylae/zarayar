@@ -11,11 +11,13 @@
 </template>
 
 <script setup>
+let { settings } = useSettings()
+
 useHead({
-  titleTemplate: '%s زرعیار'
+  titleTemplate: `%s ${settings.value?.headerSettings.title || 'توتونچی'}`
 })
 
-let hideEnterAppSec = ref(false)
+let hideEnterAppSec = ref(settings.value?.introPage.isActive)
 </script>
 
 <style>

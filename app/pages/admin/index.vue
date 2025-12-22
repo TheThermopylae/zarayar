@@ -1,14 +1,12 @@
 <template>
-  <div >
+  <div>
     <section>
-      <AdminHomeItemsSection class="mb-2" />
-      <AdminHomeItemsSection />
+      <AdminHomeItemsSection @error="showError" :items="items" />
     </section>
   </div>
 </template>
 
 <script setup>
-
 useHead({
   title: 'مدیریت سامانه |'
 })
@@ -16,6 +14,21 @@ useHead({
 definePageMeta({
   title: 'مدیریت سامانه'
 })
+
+let { showToast } = useToastComp()
+
+let { data: items, pending } = await useFetch(
+  '/api/admin/currency/getCurrency',
+  {
+    credentials: 'include'
+  }
+)
+
+console.log(items.value)
+
+function showError (text) {
+  showToast('error', 'خطا', text)
+}
 </script>
 
 <style>

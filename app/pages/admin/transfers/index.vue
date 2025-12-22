@@ -3,13 +3,21 @@
     <AdminTransfersFilterDrawer />
     <p class="my-4 text-sm">تعداد 53 حواله در لیست حواله ها یافت شد</p>
     <main class="space-y-3">
-      <AdminTransfersTransferCard v-for="item in 5" />
+      <Skeleton
+        v-for="item in 3"
+        width="100%"
+        height="14rem"
+        v-if="pending"
+      />
+      <AdminTransfersTransferCard
+        v-else
+        v-for="item in data"
+        :key="item._id"
+        :data="item"
+        @success="successFunc"
+      />
     </main>
     <Toast />
-    <!-- v-for="item in data"
-    :key="item._id"
-    :data="item"
-    @success="successFunc" -->
   </div>
 </template>
 
@@ -24,9 +32,12 @@ definePageMeta({
 
 let { showToast } = useToastComp()
 
-let { data, refresh } = await useFetch('/api/admin/transfers/getTransfers', {
-  credentials: 'include'
-})
+let { data, refresh, pending } = useLazyFetch(
+  '/api/admin/transfers/getTransfers',
+  {
+    credentials: 'include'
+  }
+)
 
 async function successFunc (text) {
   await refresh()

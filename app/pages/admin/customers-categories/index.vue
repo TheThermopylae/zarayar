@@ -1,20 +1,23 @@
 <template>
   <div>
     <div class="flex justify-between items-center mb-3">
-      <p class="text-sm">تعداد 3 دسته بندی در لیست دسته بندی مشتریان یافت شد</p>
+      <p class="text-sm" v-if="data">
+        تعداد {{ data?.length }} دسته بندی در لیست دسته بندی مشتریان یافت شد
+      </p>
     </div>
     <main class="space-y-3">
-      <!-- <Skeleton
+      <Skeleton
         v-if="pending"
         width="100%"
         height="110px"
         v-for="item in 10"
         :key="item"
-      ></Skeleton> -->
+      ></Skeleton>
       <AdminCategoriesCategoryCard
-        @success="showToast('آیتم بروز شد')"
-        v-for="item in items"
-        :key="item"
+        v-else
+        @success="showSuccess"
+        v-for="item in data"
+        :key="item._id"
         :data="item"
       />
       <Toast />
@@ -31,25 +34,21 @@ definePageMeta({
   title: 'دسته بندی مشتریان'
 })
 
-let route = useRoute()
-
-import { io } from 'socket.io-client'
-let config = useRuntimeConfig()
-
 let items = ref([1, 2, 3, 4, 5])
 
-// let { data: currencies, pending } = await useLazyFetch(
-//   '/api/admin/currency/getCurrency',
-//   {
-//     credentials: 'include'
-//   }
-// )
+let { data, refresh, pending } =await useFetch(
+  '/api/admin/customers/getCategories',
+  {
+    credentials: 'include'
+  }
+)
+
+console.log(data.value)
 
 let { showToast } = useToastComp()
 
-// const socket = io(config.public.API_BASE_URL)
-
-// socket.on('price:update', items => {
-//   currencies.value = items
-// })
+async function showSuccess (text) {
+  await refresh()
+  showToast(text)
+}
 </script>

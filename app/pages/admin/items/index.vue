@@ -1,8 +1,8 @@
 <template>
   <div>
     <div class="flex justify-between items-center mb-3">
-      <p class="text-sm">
-        تعداد 1
+      <p class="text-sm" v-if="items">
+        تعداد {{ items.length }}
         <span
           v-text="
             !route.query.type
@@ -28,7 +28,12 @@
         ></span>
         ها یافت شد
       </p>
-      <AdminItemsCategoryDrawer />
+      <AdminItemsCategoryDrawer
+        :data="items"
+        :categories="categories"
+        @success="showSuccess"
+        @warn="showWarn"
+      />
     </div>
     <main class="space-y-3">
       <!-- <Skeleton
@@ -61,23 +66,33 @@ definePageMeta({
 
 let route = useRoute()
 
-import { io } from 'socket.io-client'
-let config = useRuntimeConfig()
+let { data: items, pending } = await useFetch(
+  '/api/admin/currency/getCurrency',
+  {
+    credentials: 'include'
+  }
+)
 
-let items = ref([1, 2, 3, 4, 5])
+// console.log(items.value)
 
-// let { data: currencies, pending } = await useLazyFetch(
-//   '/api/admin/currency/getCurrency',
-//   {
-//     credentials: 'include'
-//   }
-// )
+let {
+  data: categories,
+  pending: catPen,
+  refresh
+} = await useFetch('/api/admin/itemsCategory/get', {
+  credentials: 'include'
+})
+
+console.log(categories.value)
 
 let { showToast } = useToastComp()
 
-// const socket = io(config.public.API_BASE_URL)
+async function showSuccess (text) {
+  await refresh()
+  showToast(text)
+}
 
-// socket.on('price:update', items => {
-//   currencies.value = items
-// })
+function showWarn (text) {
+  showToast('warn', 'اخطار', text)
+}
 </script>

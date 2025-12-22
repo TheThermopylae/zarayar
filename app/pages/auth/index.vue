@@ -146,13 +146,13 @@ async function sendData () {
       formData.append('birthcertificate', data.birthcertificate)
       formData.append('businessLicense', data.businessLicense)
 
-      let result = await $fetch('/api/admin/auth/sendAuth', {
+      let result = await $fetch('/api/auth/sendAuth', {
         credentials: 'include',
         method: 'POST',
         body: formData
       })
 
-      showToast(result.message)
+      showToast('احراز هویت شما با موفقیت ثبت شد و در حال بررسی است')
     }
   } catch (err) {
     showToast('error', 'خطا', err.message)

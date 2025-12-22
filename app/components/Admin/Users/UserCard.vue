@@ -24,7 +24,7 @@
             fill="#BFBFBF"
           />
         </svg>
-        کمیل ملکی
+        {{ props.data.fname || 'بدون' }} {{ props.data.lname || 'نام' }}
       </div>
       <!-- v-if="userData?._id != props.data?._id" -->
       <div class="flex items-center justify-between gap-3">
@@ -59,55 +59,73 @@
         <input
           type="checkbox"
           class="toggle-switch"
+          :checked="props.data.status == 'active'"
+          @change="changeActiveStatus"
         />
       </div>
     </div>
     <div class="pt-2 mt-2 border-t border-strokesec" v-if="showMenu">
       <ul class="text-sm">
-        <li class="p-2 flex justify-between items-center h-9">
+        <!-- <li class="p-2 flex justify-between items-center h-9">
           آخرین بازدید
           <span class="flex items-center gap-2">
             <div class="size-2.5 rounded-full bg-cgreen"></div>
             آنلاین
           </span>
-        </li>
-        <li
+        </li> -->
+        <!-- <li
           class="p-2 flex justify-between items-center h-9 bg-[#F2F2F2] rounded-10"
         >
           آخرین معامله
           <span class="flex items-center gap-2"> 7 ساعت قبل </span>
-        </li>
+        </li> -->
         <li class="p-2 flex justify-between items-center h-9">
           شماره موبایل
-          <span class="flex items-center gap-2">09357559553</span>
+          <span class="flex items-center gap-2">{{ props.data.phone }}</span>
         </li>
-        <li
+        <!-- <li
           class="p-2 flex justify-between items-center h-9 bg-[#F2F2F2] rounded-10"
         >
           کد ملی
           <span class="flex items-center gap-2">---</span>
-        </li>
-        <li class="p-2 flex justify-between items-center h-9">
+        </li> -->
+        <!-- <li class="p-2 flex justify-between items-center h-9">
           کد حسابداری
           <span class="flex items-center gap-2">5236</span>
-        </li>
+        </li> -->
         <li
           class="p-2 flex justify-between items-center h-9 bg-[#F2F2F2] rounded-10"
         >
           دسته بندی
-          <span class="flex items-center gap-2">مشتری</span>
+          <span class="flex items-center gap-2">{{
+            props.data.Accountgroup
+          }}</span>
         </li>
         <li class="p-2 flex justify-between items-center h-9">
+          نوع حساب
+          <span class="flex items-center gap-2">{{
+            props.data.Accounttype
+          }}</span>
+        </li>
+        <li
+          class="p-2 flex justify-between items-center h-9 bg-[#F2F2F2] rounded-10"
+        >
           وضعیت مشتری
           <span
+            v-if="props.data.isStatus"
             class="border border-cgreen rounded-10 bg-[#96A8254D] text-cgreen px-1 py-0.5"
             >فعال</span
+          >
+          <span
+            v-else
+            class="border border-cred rounded-10 bg-[#a825254d] text-cred px-1 py-0.5"
+            >غیر فعال</span
           >
         </li>
       </ul>
       <div class="grid grid-cols-2 gap-2 text-xs mt-2">
         <NuxtLink
-          to="/admin/users/trade/123"
+          :to="`/admin/users/trade/${props.data._id}`"
           class="flex justify-center items-center gap-2 rounded-10 border border-strokesec p-2"
         >
           <svg
@@ -133,7 +151,7 @@
           معامله جدید
         </NuxtLink>
         <NuxtLink
-          to="/"
+          :to="`/admin/users/${props.data._id}`"
           class="flex justify-center items-center gap-2 rounded-10 border border-strokesec p-2"
         >
           <svg
@@ -157,33 +175,22 @@
           ویرایش
         </NuxtLink>
         <NuxtLink
-          to="/"
+          :to="`/admin/users/auth/${props.data._id}`"
           class="flex justify-center items-center gap-2 rounded-10 border border-strokesec p-2"
         >
           <svg
-            width="15"
-            height="4"
-            viewBox="0 0 15 4"
-            fill="none"
+            class="flex-shrink-0"
             xmlns="http://www.w3.org/2000/svg"
+            width="20px"
+            height="20px"
+            viewBox="0 0 24 24"
           >
             <path
-              d="M0.75 1.9375C0.75 1.28166 1.28166 0.75 1.9375 0.75C2.59334 0.75 3.125 1.28166 3.125 1.9375C3.125 2.59334 2.59334 3.125 1.9375 3.125C1.28166 3.125 0.75 2.59334 0.75 1.9375Z"
-              stroke="#616161"
-              stroke-width="1.5"
-            />
-            <path
-              d="M6.29199 1.9375C6.29199 1.28166 6.82365 0.75 7.47949 0.75C8.13533 0.75 8.66699 1.28166 8.66699 1.9375C8.66699 2.59334 8.13533 3.125 7.47949 3.125C6.82365 3.125 6.29199 2.59334 6.29199 1.9375Z"
-              stroke="#616161"
-              stroke-width="1.5"
-            />
-            <path
-              d="M11.834 1.9375C11.834 1.28166 12.3656 0.75 13.0215 0.75C13.6773 0.75 14.209 1.28166 14.209 1.9375C14.209 2.59334 13.6773 3.125 13.0215 3.125C12.3656 3.125 11.834 2.59334 11.834 1.9375Z"
-              stroke="#616161"
-              stroke-width="1.5"
+              fill="currentColor"
+              d="M14.154 12.462h4.077v-1h-4.077zm0-2.77h4.077v-1h-4.077zm-8.385 5.616h6.616v-.166q0-.875-.88-1.355t-2.428-.48t-2.429.48t-.879 1.355zm3.308-3.616q.633 0 1.066-.433q.434-.434.434-1.067t-.434-1.066t-1.066-.434t-1.066.434t-.434 1.066t.434 1.067t1.066.433M4.616 19q-.691 0-1.153-.462T3 17.384V6.616q0-.691.463-1.153T4.615 5h14.77q.69 0 1.152.463T21 6.616v10.769q0 .69-.463 1.153T19.385 19zm0-1h14.769q.23 0 .423-.192t.192-.424V6.616q0-.231-.192-.424T19.385 6H4.615q-.23 0-.423.192T4 6.616v10.769q0 .23.192.423t.423.192M4 18V6z"
             />
           </svg>
-          بیشتر
+          احراز هویت
         </NuxtLink>
         <NuxtLink
           to="/"
@@ -206,6 +213,35 @@
           </svg>
           ارسال پیامک
         </NuxtLink>
+        <NuxtLink
+          :to="`/admin/users/more/${props.data._id}`"
+          class="flex justify-center items-center gap-2 rounded-10 border border-strokesec p-2 col-span-2"
+        >
+          <svg
+            width="19"
+            height="19"
+            viewBox="0 0 19 19"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              d="M2.77051 9.5C2.77051 8.84416 3.30217 8.3125 3.95801 8.3125C4.61385 8.3125 5.14551 8.84416 5.14551 9.5C5.14551 10.1558 4.61385 10.6875 3.95801 10.6875C3.30217 10.6875 2.77051 10.1558 2.77051 9.5Z"
+              stroke="#616161"
+              stroke-width="1.5"
+            />
+            <path
+              d="M8.3125 9.5C8.3125 8.84416 8.84416 8.3125 9.5 8.3125C10.1558 8.3125 10.6875 8.84416 10.6875 9.5C10.6875 10.1558 10.1558 10.6875 9.5 10.6875C8.84416 10.6875 8.3125 10.1558 8.3125 9.5Z"
+              stroke="#616161"
+              stroke-width="1.5"
+            />
+            <path
+              d="M13.8545 9.5C13.8545 8.84416 14.3862 8.3125 15.042 8.3125C15.6978 8.3125 16.2295 8.84416 16.2295 9.5C16.2295 10.1558 15.6978 10.6875 15.042 10.6875C14.3862 10.6875 13.8545 10.1558 13.8545 9.5Z"
+              stroke="#616161"
+              stroke-width="1.5"
+            />
+          </svg>
+          بیشتر
+        </NuxtLink>
       </div>
     </div>
     <Dialog v-model:visible="deleteModal" modal header="حذف کاربر">
@@ -227,7 +263,7 @@
         />
       </div>
     </Dialog>
-    <Toast />
+    <!-- <Toast /> -->
   </div>
   <!-- end -->
 </template>
@@ -241,7 +277,7 @@ let { userData } = userAuth()
 let { showToast } = useToastComp()
 
 let props = defineProps(['data'])
-let emit = defineEmits(['success'])
+let emit = defineEmits(['successRefresh', 'success'])
 
 let showMenu = ref(false)
 
@@ -260,7 +296,7 @@ async function deleteUserFunc () {
       body: { id: props.data._id }
     })
 
-    emit('success', 'کاربر با موفقیت حذف شد')
+    emit('successRefresh', 'کاربر با موفقیت حذف شد')
     deleteModal.value = false
   } catch (err) {
     showToast('error', 'خطا', err.msg)
@@ -279,11 +315,26 @@ async function changeRule () {
       body: { id: props.data._id }
     })
 
-    emit('success', 'نقش کاربر با موفقیت عوض شد')
+    emit('successRefresh', 'نقش کاربر با موفقیت عوض شد')
   } catch (err) {
     showToast('error', 'خطا', err.msg)
   } finally {
     loadingRole.value = false
+  }
+}
+
+async function changeActiveStatus () {
+  try {
+    let data = await $fetch('/api/admin/users/changeStatus', {
+      method: 'POST',
+      credentials: 'include',
+      body: { id: props.data._id }
+    })
+
+    emit('successRefresh', data.message)
+  } catch (err) {
+    showToast('error', 'خطا', err.msg)
+  } finally {
   }
 }
 </script>

@@ -107,10 +107,11 @@
 
 <script setup>
 useHead({
-  title: 'معامله جدید (کمیل ملکی) |'
+  title: 'معامله جدید |'
 })
+
 definePageMeta({
-  title: 'معامله جدید (کمیل ملکی)'
+  title: 'معامله جدید'
 })
 
 let items = ref(['طلا', 'سکه', 'نقره'])

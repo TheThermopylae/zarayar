@@ -1,8 +1,9 @@
 <template>
   <div>
-    <button
-      class="border border-strokesec rounded-10 p-3 w-full flex justify-between items-center"
+    <Button
+      class="!border !border-strokesec !rounded-10 !p-3 !w-full !flex !justify-between !items-center !bg-white !text-graydark !mb-5"
       @click="visible = true"
+      :loading="props.pending"
     >
       <div class="flex items-center gap-2">
         <svg
@@ -34,7 +35,7 @@
           stroke-linecap="round"
         />
       </svg>
-    </button>
+    </Button>
     <Drawer
       v-model:visible="visible"
       position="bottom"
@@ -49,7 +50,7 @@
             type="text"
             id="name"
             class="p-2 rounded-10 border border-stroke block mt-1.5 w-full"
-            v-model="form.name"
+            v-model="props.data.fullname"
           />
         </div>
         <div>
@@ -58,7 +59,7 @@
             type="text"
             id="phone"
             class="p-2 rounded-10 border border-stroke block mt-1.5 w-full"
-            v-model="form.phone"
+            v-model="props.data.phone"
           />
         </div>
         <div>
@@ -67,7 +68,7 @@
             type="text"
             id="code-meli"
             class="p-2 rounded-10 border border-stroke block mt-1.5 w-full"
-            v-model="form.codemeli"
+            v-model="props.data.nationalityid"
           />
         </div>
         <div>
@@ -76,13 +77,13 @@
             type="text"
             id="code"
             class="p-2 rounded-10 border border-stroke block mt-1.5 w-full"
-            v-model="form.code"
+            v-model="props.data.accountCode"
           />
         </div>
         <div>
           <label for="category">نام دسته بندی</label>
           <Select
-            v-model="form.category"
+            v-model="props.data.accountGroup"
             :options="categories"
             pt:root="w-full !rounded-10 !bg-white !shadow-none !border-[#00000026] !mt-1.5"
             pt:label="!text-graydark"
@@ -112,8 +113,9 @@
         <div>
           <label for="user-status">وضعیت مشتری</label>
           <Select
-            v-model="form.status"
+            v-model="props.data.status"
             :options="userStatus"
+            option-label="fa"
             pt:root="w-full !rounded-10 !bg-white !shadow-none !border-[#00000026] !mt-1.5"
             pt:label="!text-graydark"
           >
@@ -140,10 +142,10 @@
           </Select>
         </div>
         <div class="grid grid-cols-2 gap-2">
-          <Button label="اعمال فیلتر" pt:root="!text-sm" @click="visible = false" />
+          <Button label="اعمال فیلتر" pt:root="!text-sm" @click="filterFunc" />
           <Button
             label="ریست کردن"
-            pt:root="!bg-white !text-primary !text-sm"
+            pt:root="!bg-white !text-primary !text-sm !border"
             @click="resetForm"
           />
         </div>
@@ -153,22 +155,23 @@
 </template>
 
 <script setup>
+let props = defineProps(['data', 'pending'])
+let emit = defineEmits(['refreshFilter'])
 let visible = ref(false)
 
 let categories = ref(['بنکدار ', 'ویژه'])
 
-let userStatus = ref(['فعال', 'غیر فعال'])
-
-let form = reactive({
-  name: '',
-  phone: '',
-  codemeli: '',
-  code: '',
-  category: '',
-  status: ''
-})
+let userStatus = ref([
+  { fa: 'فعال', en: 'active' },
+  { fa: 'غیر فعال', en: 'disabled' }
+])
 
 function resetForm () {
-  for (let item in form) form[item] = ''
+  for (let item in props.data) props.data[item] = ''
+}
+
+function filterFunc () {
+  emit('refreshFilter')
+  visible.value = false
 }
 </script>

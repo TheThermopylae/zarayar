@@ -1,5 +1,4 @@
 <template>
-  <TitleSection title="فیش | قبض های ارسالی" />
   <main class="p-3 rounded-10 bg-white space-y-3">
     <AdminDepositsDepositCard
       v-for="item in data"

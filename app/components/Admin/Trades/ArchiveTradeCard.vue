@@ -4,8 +4,15 @@
       class="flex justify-between items-center pb-2 border-b border-strokesec"
     >
       <h4 class="text-sm">
-        <span class="px-2 py-0.5 rounded-10 bg-[#E7F2A7] text-xs font-bold"
+        <span
+          class="px-2 py-0.5 rounded-10 bg-[#E7F2A7] text-xs font-bold"
+          v-if="props.data.side == 'buy'"
           >خرید</span
+        >
+        <span
+          class="px-2 py-0.5 rounded-10 bg-reject text-[#80182B] text-xs font-bold"
+          v-else
+          >فروش</span
         >
         نقد فردایی
       </h4>
@@ -23,21 +30,17 @@
         class="h-10 px-2 flex justify-between items-center bg-[#FAFAFA] rounded-10"
       >
         وزن | تعداد
-        <span>17 گرم</span>
+        <span>{{ props.data.weight }} گرم</span>
       </li>
       <li class="h-10 px-2 flex justify-between items-center">
         مظنه
-        <span>500,000</span>
+        <span>{{ props.data.unitPrice.toLocaleString() }}</span>
       </li>
       <li
         class="h-10 px-2 flex justify-between items-center bg-[#FAFAFA] rounded-10"
       >
         مبلغ کل
-        <span>500,000</span>
-      </li>
-      <li class="h-10 px-2 flex justify-between items-center">
-        مظنه
-        <span>500,000</span>
+        <span>{{ props.data.totalPrice.toLocaleString() }}</span>
       </li>
       <li
         class="h-10 px-2 flex justify-between items-center gap-5 bg-[#FAFAFA] rounded-10"
@@ -70,74 +73,27 @@
             />
           </svg>
         </h4>
-        <p class="p-1 bg-white border border-strokesec rounded-10 flex-grow">
+        <!-- <p class="p-1 bg-white border border-strokesec rounded-10 flex-grow">
           تایید شده توسط آقای جوینده
-        </p>
-        <span class="px-2 py-1 rounded-10 bg-[#96A8254D] text-[#5A6804]"
+        </p> -->
+        <span
+          class="px-2 py-1 rounded-10 bg-pending text-[#5A6804]"
+          v-if="props.data.status == 'pending'"
+          >در انتظار تایید</span
+          >
+          <span class="px-2 py-1 rounded-10 bg-[#96A8254D] text-[#5A6804]"
+          v-else-if="props.data.status == 'confirmed'"
           >تایید شده</span
+        >
+          <span class="px-2 py-1 rounded-10 bg-[#96A8254D] text-[#5A6804]"
+          v-else
+          >رد شده</span
         >
       </li>
     </ul>
-    <Button label="حذف" pt:root="!bg-[#E8436226] !text-cred !border !border-cred w-full" />
   </div>
-
-  <Drawer
-    v-model:visible="visible"
-    header="حذف دسته بندی"
-    position="bottom"
-    style="height: auto"
-  >
-    <p>آیا میخواهید این دسته بندی را حذف کنید؟</p>
-    <div class="grid grid-cols-2 gap-2 mt-5">
-      <Button label="بله" @click="visible = false" />
-      <Button
-        label="خیر"
-        @click="visible = false"
-        pt:root="!bg-[#E84362] !border-none"
-      />
-    </div>
-  </Drawer>
 </template>
 
 <script setup>
-import NumberFlow from '@number-flow/vue'
-
-let { showToast } = useToastComp()
 let props = defineProps(['data'])
-let emit = defineEmits(['success'])
-
-let visible = ref(false)
-let loading = ref(false)
-
-async function updateItemFunc () {
-  try {
-    let data = await $fetch('/api/admin/currency/updateCurrency', {
-      credentials: 'include',
-      method: 'POST',
-      body: { ...props.data }
-    })
-
-    emit('success', data.message)
-  } catch (err) {
-    showToast('error', 'خطا', err.message)
-  }
-}
-
-async function removeItemFunc () {
-  try {
-    loading.value = true
-
-    let data = await $fetch('/api/admin/currency/removeCurrency', {
-      credentials: 'include',
-      method: 'POST',
-      body: { id: props.data._id }
-    })
-
-    emit('success', data.message)
-  } catch (err) {
-    showToast('error', 'خطا', err.message)
-  } finally {
-    loading.value = true
-  }
-}
 </script>

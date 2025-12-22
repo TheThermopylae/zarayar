@@ -1,10 +1,5 @@
 <template>
   <main>
-    <TitleSection title="خرید و فروش ها">
-      <template #left-btn>
-        <FilterDrawer />
-      </template>
-    </TitleSection>
     <Skeleton
       width="full"
       height="8rem"
@@ -22,9 +17,11 @@ useHead({
   title: 'خرید و فروش ها |'
 })
 
+definePageMeta({
+  title: 'خرید و فروش ها'
+})
+
 let { data, pending } = useLazyFetch('/api/user/orders/getOrders', {
   credentials: 'include'
 })
-
-console.log(data.value)
 </script>

@@ -10,4 +10,8 @@
 definePageMeta({
   layout: false
 })
+
+useHead({
+  titleTemplate: `%s پنل ادمین`
+})
 </script>

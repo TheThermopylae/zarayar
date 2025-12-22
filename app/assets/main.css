@@ -359,9 +359,9 @@ button {
     transition: all 150ms;
 }
 
-.p-button:hover {
+/* .p-button:hover {
     opacity: .9;
-}
+} */
 
 .p-drawer {
     @apply !rounded-t-2xl !text-graydark

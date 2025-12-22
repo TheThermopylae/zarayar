@@ -1,8 +1,5 @@
 <template>
-  <header
-    class="p-3 border-b border-[#DEDEDE]"
-    :class="{ 'pb-6': showMenu, 'h-[53px]': !showMenu }"
-  >
+  <header class="p-3 border-b border-[#DEDEDE] items-center">
     <div class="flex justify-between items-center">
       <div class="flex items-center gap-2">
         <Button unstyled v-if="route.path == '/admin'" @click="visible = true">
@@ -126,13 +123,20 @@
       >
         خروجی
       </NuxtLink>
+      <NuxtLink
+        v-else-if="route.path == '/admin/customers-categories'"
+        to="/admin/customers-categories/add"
+        class="px-2 py-1 rounded bg-secondary text-xs"
+      >
+        افزودن دسته بندی
+      </NuxtLink>
     </div>
     <div
-      class="grid grid-cols-3 gap-2 flex-wrap text-xs h-0 overflow-hidden transition-all duration-300 relative top-3"
-      :class="{ '!h-[217px]': showMenu }"
+      v-if="route.path == '/admin' && showMenu"
+      class="grid grid-cols-3 gap-2 flex-wrap text-xs mt-3"
     >
-      <NuxtLink
-        to="/"
+      <button
+        @click="visibleAdmin = true"
         class="flex flex-col items-center gap-2 border border-strokesec p-2 rounded-10 bg-[#FAFAFA]"
       >
         <svg
@@ -148,9 +152,9 @@
           />
         </svg>
         پیام مدیریت
-      </NuxtLink>
+      </button>
       <NuxtLink
-        to="/"
+        to="/admin/settings"
         class="flex flex-col items-center gap-2 border border-strokesec p-2 rounded-10 bg-[#FAFAFA]"
       >
         <svg
@@ -168,7 +172,7 @@
         تنظیمات
       </NuxtLink>
       <NuxtLink
-        to="/"
+        to="/admin/orders"
         class="flex flex-col items-center gap-2 border border-strokesec p-2 rounded-10 bg-[#FAFAFA]"
       >
         <svg
@@ -401,6 +405,14 @@
         </li>
         <li>
           <NuxtLink
+            to="/admin/orders"
+            active-class="bg-primary text-white"
+            class="block px-3 py-2 rounded-md"
+            >خرید و فروش ها</NuxtLink
+          >
+        </li>
+        <li>
+          <NuxtLink
             to="/admin/items"
             active-class="bg-primary text-white"
             class="block px-3 py-2 rounded-md"
@@ -417,6 +429,27 @@
         </li>
       </ul>
     </Drawer>
+    <!-- admin message -->
+    <Drawer
+      @after-hide="adminMessage = ''"
+      v-model:visible="visibleAdmin"
+      header="پیام مدیر سیستم"
+      position="bottom"
+      style="height: auto"
+    >
+      <textarea
+        class="bg-[#F3F3F3] p-3 rounded-10 block w-full resize-x-none"
+        v-model="adminMessage"
+        maxlength="500"
+      />
+
+      <span class="block my-2">{{ adminMessage.length }} / 500</span>
+      <Button
+        label="ثبت و ذخیره پیام"
+        @click="visibleAdmin = false"
+        pt:root="!bg-[#B0E37C] w-full"
+      />
+    </Drawer>
   </header>
 </template>
 
@@ -426,6 +459,10 @@ let route = useRoute()
 let showMenu = ref(false)
 
 let visible = ref(false)
+
+let visibleAdmin = ref(false)
+
+let adminMessage = ref('')
 
 function backBtn () {
   history.back()

@@ -3,9 +3,14 @@
     <div
       class="absolute top-1/2 right-1/2 -translate-y-1/2 translate-x-1/2 text-center w-full"
     >
-      <img src="/LogoTutunchi.svg" class="w-[151px] h-[175px] block m-auto" />
-      <h1 class="font-bold text-4xl mt-6 mb-3">آبشده توتونچی</h1>
-      <h2>معاملات آنلاین سکه و طلای آبشده</h2>
+      <img
+        :src="settings?.introPage.imageUrl"
+        class="w-[151px] h-[175px] block m-auto rounded-10"
+      />
+      <h1 class="font-bold text-4xl mt-6 mb-3">
+        {{ settings?.introPage.title }}
+      </h1>
+      <h2>{{ settings?.introPage.description }}</h2>
     </div>
     <button
       class="bg-[#DDB976] rounded-2xl p-2 text-black flex items-center gap-5 absolute left-1/2 -translate-x-1/2 bottom-5 font-bold"
@@ -37,6 +42,8 @@
 </template>
 
 <script setup>
+let { settings } = useSettings()
+
 onMounted(() => (document.body.style.overflow = 'hidden'))
 onBeforeUnmount(() => (document.body.style.overflow = 'auto'))
 </script>

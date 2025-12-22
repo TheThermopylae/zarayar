@@ -3,7 +3,7 @@
     <div
       class="flex justify-between items-center border-b border-stroke mb-2 pb-2"
     >
-      <h4>کمیل ملکی</h4>
+      <h4>{{ props.data.fname }} {{ props.data.lname }}</h4>
       <button @click="$emit('removeCustomer')">
         <svg
           width="12"
@@ -29,7 +29,11 @@
     </div>
     <div class="flex justify-between">
       <h4>شماره موبایل</h4>
-      09357559553
+      {{ props.data.phone }}
     </div>
   </div>
 </template>
+
+<script setup>
+let props = defineProps(['data'])
+</script>

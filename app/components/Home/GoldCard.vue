@@ -22,7 +22,6 @@
         style="height: auto"
         pt:header="!pb-0 !pt-2.5"
         pt:root="w-full !max-w-[500px] !rounded-t-2xl !text-black !select-none"
-        @after-hide="value = ''"
       >
         <template #header>
           <h4 class="font-bold text-xl">
@@ -144,8 +143,201 @@
         <Button
           pt:root="!w-full !mt-3"
           :label="side == 'buy' ? 'خرید' : 'فروش'"
-          @click="submit"
-          :loading="loading"
+          @click="showSubmit"
+        />
+      </Drawer>
+      <Drawer
+        v-model:visible="visibleSubmit"
+        header="تایید معامله"
+        position="bottom"
+        style="height: auto"
+      >
+        <div class="space-y-2">
+          <div class="flex justify-between">
+            <h4>نوع معامله</h4>
+            <p>
+              <span v-text="side == 'buy' ? 'خرید' : 'فروش'" />
+              {{ props.data.name }}
+            </p>
+          </div>
+          <div class="flex justify-between">
+            <h4>نوع معامله</h4>
+            <span>
+              {{ value }}
+              گرم
+            </span>
+          </div>
+        </div>
+        <div
+          class="border rounded-10 border-stroke bg-[#F9F9FA99] p-1 mt-3 space-y-1.5"
+        >
+          <div
+            class="flex justify-between bg-white p-1.5 rounded-10 border border-stroke"
+          >
+            <h4>مظنه</h4>
+            <span>
+              {{ props.data.amount.toLocaleString() }}
+              ریال
+            </span>
+          </div>
+          <div
+            class="flex justify-between bg-white p-1.5 rounded-10 border border-stroke"
+          >
+            <h4>مظنه</h4>
+            <span>
+              {{
+                (
+                  Math.round(
+                    props.data.amount *
+                      (1 +
+                        (props.data.profitBuy +
+                          props.data.profitBuyAdjustment) /
+                          100)
+                  ) * value
+                ).toLocaleString()
+              }}
+              ریال
+            </span>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2 mt-2">
+          <Button
+            label="ثبت سفارش"
+            pt:root="!bg-[#83BCFF]"
+            @click="submit"
+            :loading="loading"
+          />
+          <Button
+            label="ویرایش"
+            pt:root="!bg-white !border !border-[#83BCFF] !text-[#83BCFF]"
+            @click="editOrder"
+          />
+        </div>
+      </Drawer>
+      <Drawer
+        v-model:visible="visibleSuccessMessage"
+        position="bottom"
+        style="height: auto"
+      >
+        <div class="flex flex-col items-center mb-4">
+          <svg
+            width="50"
+            height="50"
+            viewBox="0 0 50 50"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M2.60425 25C2.60425 12.6311 12.6312 2.60413 25.0001 2.60413C37.369 2.60413 47.3959 12.6311 47.3959 25C47.3959 37.3688 37.369 47.3958 25.0001 47.3958C12.6312 47.3958 2.60425 37.3688 2.60425 25Z"
+              fill="#96A825"
+              fill-opacity="0.2"
+            />
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M34.4383 18.6868C35.0485 19.297 35.0485 20.2863 34.4383 20.8965L24.8003 30.5345C23.3765 31.9582 21.0681 31.9582 19.6443 30.5344L15.5619 26.452C14.9517 25.8418 14.9517 24.8525 15.5619 24.2423C16.1721 23.6321 17.1614 23.6321 17.7716 24.2423L21.854 28.3247C22.0574 28.5281 22.3872 28.5281 22.5906 28.3247L32.2286 18.6868C32.8388 18.0766 33.8281 18.0766 34.4383 18.6868Z"
+              fill="#96A825"
+            />
+          </svg>
+          <p>معامله تایید شد</p>
+        </div>
+        <div class="space-y-2">
+          <div class="flex justify-between">
+            <h4>نوع معامله</h4>
+            <p>
+              <span v-text="side == 'buy' ? 'خرید' : 'فروش'" />
+              {{ props.data.name }}
+            </p>
+          </div>
+          <div class="flex justify-between">
+            <h4>نوع معامله</h4>
+            <span>
+              {{ value }}
+              گرم
+            </span>
+          </div>
+        </div>
+        <div
+          class="border rounded-10 border-stroke bg-[#F9F9FA99] p-1 mt-3 space-y-1.5"
+        >
+          <div
+            class="flex justify-between bg-white p-1.5 rounded-10 border border-stroke"
+          >
+            <h4>مظنه</h4>
+            <span>
+              {{ props.data.amount.toLocaleString() }}
+              ریال
+            </span>
+          </div>
+          <div
+            class="flex justify-between bg-white p-1.5 rounded-10 border border-stroke"
+          >
+            <h4>مبلغ کل</h4>
+            <span>
+              {{
+                (
+                  Math.round(
+                    props.data.amount *
+                      (1 +
+                        (props.data.profitBuy +
+                          props.data.profitBuyAdjustment) /
+                          100)
+                  ) * value
+                ).toLocaleString()
+              }}
+              ریال
+            </span>
+          </div>
+        </div>
+        <Button
+          label="متوجه شدم"
+          pt:root="!mt-2 w-full !bg-secondary"
+          @click=";(visibleSuccessMessage = false), (value = '')"
+        />
+      </Drawer>
+      <Drawer
+        v-model:visible="visibleErrorMessage"
+        position="bottom"
+        style="height: auto"
+        pt:header="!pb-0"
+      >
+        <div class="flex flex-col items-center mb-4">
+          <svg
+            width="50"
+            height="50"
+            viewBox="0 0 50 50"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M2.60401 25C2.60401 12.6311 12.631 2.60419 24.9998 2.60419C37.3687 2.60419 47.3957 12.6311 47.3957 25C47.3957 37.3689 37.3687 47.3959 24.9998 47.3959C12.631 47.3959 2.60401 37.3689 2.60401 25Z"
+              fill="#E84362"
+              fill-opacity="0.2"
+            />
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M17.6452 17.6451C18.2553 17.0349 19.2447 17.035 19.8549 17.6452L32.3548 30.1451C32.9649 30.7553 32.9649 31.7447 32.3547 32.3549C31.7445 32.9651 30.7552 32.965 30.145 32.3548L17.6451 19.8548C17.035 19.2447 17.035 18.2553 17.6452 17.6451Z"
+              fill="#E84362"
+            />
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M32.3549 17.6452C32.9651 18.2553 32.965 19.2447 32.3549 19.8549L19.8549 32.3548C19.2447 32.9649 18.2553 32.9649 17.6451 32.3547C17.0349 31.7445 17.035 30.7552 17.6452 30.145L30.1452 17.6451C30.7553 17.0349 31.7447 17.035 32.3549 17.6452Z"
+              fill="#E84362"
+            />
+          </svg>
+
+          <p>{{ errorMessage }}</p>
+        </div>
+        <Button
+          label="متوجه شدم"
+          pt:root="!mt-2 w-full !bg-secondary"
+          @click=";(visibleErrorMessage = false), (value = '')"
         />
       </Drawer>
     </div>
@@ -156,8 +348,15 @@
 import NumberFlow from '@number-flow/vue'
 
 let visible = ref(false)
+let visibleSubmit = ref(false)
+
+let visibleSuccessMessage = ref(false)
+let visibleErrorMessage = ref(false)
+
+let errorMessage = ref(null)
+
 let props = defineProps(['data'])
-let emit = defineEmits(['toast'])
+let emit = defineEmits(['toast', 'success'])
 
 const value = ref('')
 let side = ref('')
@@ -198,7 +397,12 @@ function handleDelete () {
   value.value = value.value.slice(0, -1)
 }
 
-async function submit () {
+function editOrder () {
+  visibleSubmit.value = false
+  visible.value = true
+}
+
+function showSubmit () {
   if (
     value.value < props.data.minOrderQty ||
     value.value > props.data.maxOrderQty
@@ -209,37 +413,41 @@ async function submit () {
       text: `وزن وارد شده باید بین ${props.data.minOrderQty} و ${props.data.maxOrderQty} باشد`
     })
   else {
-    try {
-      loading.value = false
+    visible.value = false
+    visibleSubmit.value = true
+  }
+}
 
-      let data = await $fetch('/api/user/orders/submit', {
-        credentials: 'include',
-        method: 'POST',
-        body: {
-          side: side.value,
-          settlementType: 'cash',
-          weightGram: value.value,
-          currencyId: props.data._id
-        }
-      })
+async function submit () {
+  try {
+    loading.value = true
 
-      emit('toast', {
-        type: 'success',
-        title: 'موفقیت آمیز',
-        text: 'سفارش با موفقیت ثبت شد'
-      })
-      console.log(data)
-      visible.value = false
-    } catch (err) {
-      console.log(err)
-      emit('toast', {
-        type: 'error',
-        title: 'خطا',
-        text: err.data.message
-      })
-    } finally {
-      loading.value = false
-    }
+    let data = await $fetch('/api/user/orders/submit', {
+      credentials: 'include',
+      method: 'POST',
+      body: {
+        side: side.value,
+        settlementType: 'cash',
+        weightGram: value.value,
+        currencyId: props.data._id
+      }
+    })
+
+    emit('toast', {
+      type: 'success',
+      title: 'موفقیت آمیز',
+      text: 'سفارش با موفقیت ثبت شد'
+    })
+    emit('success')
+    console.log(data)
+    visibleSuccessMessage.value = true
+  } catch (err) {
+    console.log(err.data.data.message)
+    errorMessage.value = err.data.data.message
+    visibleErrorMessage.value = true
+  } finally {
+    visibleSubmit.value = false
+    loading.value = false
   }
 }
 </script>

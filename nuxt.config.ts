@@ -33,6 +33,9 @@ export default defineNuxtConfig({
       bodyAttrs: {
         dir: 'rtl'
       },
+      link: [
+        { rel: 'icon', href: '/favicon.svg' }
+      ]
     },
     pageTransition: { name: 'page', mode: 'out-in' },
   },
@@ -40,7 +43,7 @@ export default defineNuxtConfig({
     '@primevue/nuxt-module'
   ],
   runtimeConfig: {
-    API_BASE_URL: process.env.API_BASE_URL || 'http://localhost:9477',
+    API_BASE_URL: process.env.API_BASE_URL || 'https://api.tutunchi.ir',
     public: {
       API_BASE_URL: process.env.API_BASE_URL
     },
@@ -54,7 +57,7 @@ export default defineNuxtConfig({
         options: {
           prefix: 'p',
           darkModeSelector: false,
-       
+
         }
       }
     }

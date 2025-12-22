@@ -33,9 +33,11 @@
           <label class="text-xs text-slate-600 mb-1 block">شماره تلفن</label>
           <input
             type="text"
+            inputmode="numeric"
             placeholder="مثال: 0912xxxxxxx"
             v-model="phone"
             class="w-full rounded-xl border border-slate-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-amber-300"
+            maxlength="11"
           />
         </div>
 
@@ -43,7 +45,7 @@
           <Button
             pt:root="!w-full"
             label="ارسال کد"
-            :disabled="!phone"
+            :disabled="!phone && phone.length < 11"
             :loading="loading"
             @click="loginFunc"
           />
@@ -71,6 +73,7 @@ async function loginFunc () {
   try {
     loading.value = true
 
+    console.log(config.public.API_BASE_URL)
     let data = await $fetch(`${config.public.API_BASE_URL}/auth`, {
       method: 'POST',
       body: { phone: phone.value }
@@ -79,6 +82,7 @@ async function loginFunc () {
     showToast(data.msg)
     emit('otpEmit', phone.value)
   } catch (err) {
+    console.log(err)
     showToast('error', 'خطا', err.msg)
   } finally {
     loading.value = false

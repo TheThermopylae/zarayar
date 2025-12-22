@@ -3,9 +3,11 @@ export default defineEventHandler(async event => {
   let config = useRuntimeConfig()
   let body = await readBody(event)
 
+  console.log(body)
+
   try {
     let data = await $fetch(
-      `${config.public.API_BASE_URL}/admin/user/${body.id}`,
+      `${config.public.API_BASE_URL}/admin/user/${body._id}`,
       {
         headers: {
           Authorization: `Bearer ${token}`

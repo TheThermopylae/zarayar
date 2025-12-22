@@ -1,8 +1,8 @@
 <template>
   <div>
     <HomeWarnSection />
-    <HomeItemsSection />
-    <HomeRecentOrders />
+    <HomeItemsSection @refreshOrders="refresh" />
+    <HomeRecentOrders :data="data" :pending="pending" />
   </div>
 </template>
 
@@ -13,5 +13,9 @@ useHead({
 
 definePageMeta({
   title: 'زرعیار آبشده'
+})
+
+let { data, refresh, pending } = useLazyFetch('/api/user/orders/getOrders', {
+  credentials: 'include'
 })
 </script>

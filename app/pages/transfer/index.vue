@@ -113,25 +113,8 @@
               stroke-linejoin="round"
             />
           </svg>
-          <h2>حواله های ثبت شده اخیر</h2>
+          <h2>حواله های ثبت شده</h2>
         </div>
-        <NuxtLink to="/" class="flex items-center gap-2">
-          مشاهده بیشتر
-          <svg
-            width="6"
-            height="11"
-            viewBox="0 0 6 11"
-            fill="none"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path
-              d="M4.80052 9.5L1.14032 6.03244C0.619894 5.53941 0.619893 4.71059 1.14032 4.21756L4.80052 0.75"
-              stroke="#BFBFBF"
-              stroke-width="1.5"
-              stroke-linecap="round"
-            />
-          </svg>
-        </NuxtLink>
       </div>
       <Skeleton
         width="100%"
@@ -164,6 +147,8 @@ definePageMeta({
   title: 'ثبت حواله'
 })
 
+let { userData } = userAuth()
+
 let { data, refresh, pending } = await useFetch('/api/user/havale/getHavale', {
   credentials: 'include'
 })
@@ -179,7 +164,8 @@ let { showToast } = useToastComp()
 let form = reactive({
   itemType: '',
   weight: '',
-  receiverName: ''
+  receiverName: '',
+  accountHolderName: userData.value.lname
 })
 
 let loading = ref(false)
@@ -191,20 +177,10 @@ async function submitHavale () {
     loading.value = true
 
     try {
-      let formData = new FormData()
-      formData.append('itemType', form.itemType.en)
-      formData.append('weight', form.weight)
-      formData.append('receiverName', form.receiverName)
-      formData.append('description', form.description)
-
-      if (data.file) {
-        formData.append('file', form.file)
-      }
-
       let response = await $fetch('/api/user/havale/submit', {
+        credentials: 'include',
         method: 'POST',
-        body: formData,
-        credentials: 'include'
+        body: { ...form, itemType: form.itemType.en }
       })
 
       await refresh()

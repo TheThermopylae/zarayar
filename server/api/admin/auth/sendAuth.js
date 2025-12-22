@@ -8,8 +8,6 @@ export default defineEventHandler(async event => {
   // استخراج id
   const id = formData.find(item => item.name === 'id')?.data.toString()
 
-  console.log(id)
-
   // ساخت form جدید شامل عکس‌ها
   formData.forEach(item => {
     if (item.type) {

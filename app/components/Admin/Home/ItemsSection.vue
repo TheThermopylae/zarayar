@@ -7,6 +7,7 @@
         class="toggle border-none bg-[#BFBFBF] checked:bg-[#7AB73E] text-white"
       />
     </div>
+
     <div class="grid grid-cols-2 bg-main rounded-10 p-1 my-2">
       <button
         class="p-1.5 rounded-10 transition"
@@ -23,9 +24,10 @@
         مظنه های غیرفعال (5)
       </button>
     </div>
+
     <draggable
-      v-model="items"
-      item-key="id"
+      v-model="myItems"
+      item-key="_id"
       tag="div"
       class="space-y-2"
       :animation="300"
@@ -66,7 +68,7 @@
                   </clipPath>
                 </defs>
               </svg>
-              {{ element.title }}
+              {{ element.name || element.title }}
             </div>
             <div class="flex items-center gap-2">
               بروزرسانی 3 ثانیه قبل
@@ -122,29 +124,32 @@
             </svg>
             آبشده نقد فردا مظنه خودکار
           </div>
-          <!-- items manage -->
           <div class="grid grid-cols-2 gap-3 mt-2">
             <div class="bg-white border border-strokesec rounded-10 p-2">
               <div
                 class="flex justify-between items-center border-b border-strokesec pb-2 mb-2"
               >
-                خرید ( 50،450 )
+                درصد کارمزد خرید
                 <input
                   type="checkbox"
+                  v-model="element.isBuy"
                   class="toggle border-none bg-[#BFBFBF] checked:bg-[#7AB73E] text-white"
+                  @change="sendRequest(element)"
                 />
               </div>
               <div
                 class="border border-strokesec rounded-10 p-2 flex justify-between gap-1"
               >
-                <button>
+                <button
+                  type="button"
+                  @click="changeValue(element, 'profitBuy', 1)"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24px"
                     height="24px"
                     viewBox="0 0 24 24"
                     class="text-cgreen"
-                    @click="value += 10_000"
                   >
                     <path
                       fill="currentColor"
@@ -152,7 +157,11 @@
                     />
                   </svg>
                 </button>
-                <InputNumber v-model="value" inputId="integeronly" fluid />
+                <InputNumber
+                  v-model="element.amount"
+                  inputId="integeronly"
+                  fluid
+                />
                 <button>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -160,7 +169,6 @@
                     height="24px"
                     viewBox="0 0 24 24"
                     class="text-[#E84362] rotate-180"
-                    @click="decrease"
                   >
                     <path
                       fill="currentColor"
@@ -174,23 +182,27 @@
               <div
                 class="flex justify-between items-center border-b border-strokesec pb-2 mb-2"
               >
-                فروش ( 50،450 )
+                کارمزد سود فروش
                 <input
                   type="checkbox"
+                  v-model="element.isSell"
                   class="toggle border-none bg-[#BFBFBF] checked:bg-[#7AB73E] text-white"
+                  @change="sendRequest(element)"
                 />
               </div>
               <div
                 class="border border-strokesec rounded-10 p-2 flex justify-between gap-1"
               >
-                <button>
+                <button
+                  type="button"
+                  @click="changeValue(element, 'profitSell', 1)"
+                >
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24px"
                     height="24px"
                     viewBox="0 0 24 24"
                     class="text-cgreen"
-                    @click="value += 10_000"
                   >
                     <path
                       fill="currentColor"
@@ -198,7 +210,11 @@
                     />
                   </svg>
                 </button>
-                <InputNumber v-model="value" inputId="integeronly" fluid />
+                <InputNumber
+                  v-model="element.amount"
+                  inputId="integeronly"
+                  fluid
+                />
                 <button>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -206,7 +222,6 @@
                     height="24px"
                     viewBox="0 0 24 24"
                     class="text-[#E84362] rotate-180"
-                    @click="decrease"
                   >
                     <path
                       fill="currentColor"
@@ -224,19 +239,53 @@
 </template>
 
 <script setup>
+import { ref, watch } from 'vue'
 import draggable from 'vuedraggable'
+
+let props = defineProps(['items'])
+let emit = defineEmits(['error'])
 
 let activeTab = ref(0)
 
-const items = ref([
-  { id: 1, title: 'نقدی کارتخوان' },
-  { id: 2, title: 'تست درگ اند دراپ' }
-])
+// متغیر لوکال برای درگ اند دراپ
+const myItems = ref(props.items || [])
 
-let value = ref(500_000)
+// همگام سازی پراپس با متغیر لوکال
+watch(
+  () => props.items,
+  newVal => {
+    myItems.value = newVal || []
+  }
+)
 
-function decrease () {
-  if (value.value - 10_000 >= 0) value.value -= 10_000
-  else value.value = 0
+let debounceTimer = null
+
+// تابع مدیریت تغییر مقادیر و ارسال درخواست
+const changeValue = (item, field, amount) => {
+  if (!item[field]) item[field] = 0
+
+  // محاسبه مقدار جدید
+  const newValue = item[field] + amount
+  if (newValue >= 0) {
+    item[field] = newValue
+    sendRequest(item)
+  }
+}
+
+// تابع ارسال درخواست به سرور با تاخیر
+const sendRequest = item => {
+  if (debounceTimer) clearTimeout(debounceTimer)
+
+  debounceTimer = setTimeout(async () => {
+    try {
+      await $fetch('/api/admin/currency/updateCurrency', {
+        method: 'POST',
+        body: item
+      })
+    } catch (error) {
+      emit('error')
+      console.log(error)
+    }
+  }, 500)
 }
 </script>

@@ -40,7 +40,7 @@
             stroke-linejoin="round"
           />
         </svg>
-        به روزرسانی قیمت 16:31
+        به روزرسانی قیمت: هر یک دقیقه
       </div>
       <div
         class="bg-[#E8436233] flex items-center gap-1 rounded-10 px-2 py-1.5 text-[#E84362]"
@@ -97,9 +97,18 @@
         بفروشید
       </div>
     </div>
-    <div class="border border-[#0000001A] rounded-10 p-2 bg-[#FAFAFA] space-y-2.5">
-      <HomeGoldCard v-for="item in data" :data="item" :key="item._id" />
+    <div
+      class="border border-[#0000001A] rounded-10 p-2 bg-[#FAFAFA] space-y-2.5"
+    >
+      <HomeGoldCard
+        v-for="item in data"
+        :data="item"
+        :key="item._id"
+        @toast="showToastFunc"
+        @success="$emit('refreshOrders')"
+      />
     </div>
+    <Toast />
   </div>
 </template>
 
@@ -111,11 +120,20 @@ let { data, pending } = useLazyFetch('/api/admin/currency/getCurrency', {
 })
 
 let config = useRuntimeConfig()
-import { io } from 'socket.io-client'
-const socket = io(config.public.API_BASE_URL)
+import io from 'socket.io-client';
+
+const socket = io(config.public.API_BASE_URL, {
+  // این خط مهم است: فقط از polling استفاده کن و سراغ websocket نرو
+  transports: ["polling"], 
+  
+  // تنظیمات اضافی که شاید نیاز باشد
+  withCredentials: true,
+  path: "/socket.io/" 
+});
 
 socket.on('price:update', items => {
   data.value = items
+  console.log(data.value)
 })
 
 function showToastFunc (toast) {
