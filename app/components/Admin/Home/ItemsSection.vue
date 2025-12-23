@@ -14,23 +14,27 @@
         :class="{ 'bg-white': activeTab == 0 }"
         @click="activeTab = 0"
       >
-        مظنه های فعال (1)
+        مظنه های فعال ({{ activeItemsCount }})
       </button>
       <button
         class="p-1.5 rounded-10 transition"
         :class="{ 'bg-white': activeTab == 1 }"
         @click="activeTab = 1"
       >
-        مظنه های غیرفعال (5)
+        مظنه های غیرفعال ({{ inactiveItemsCount }})
       </button>
     </div>
 
     <draggable
-      v-model="myItems"
+      v-model="displayList"
       item-key="_id"
       tag="div"
       class="space-y-2"
       :animation="300"
+      handle=".handle"
+      @change="onChange"
+      ghost-class="ghost-item"
+      drag-class="drag-item"
     >
       <template #item="{ element }">
         <div class="bg-main rounded-10 p-2 mb-2 last:m-0">
@@ -44,7 +48,7 @@
                 viewBox="0 0 17 17"
                 fill="none"
                 xmlns="http://www.w3.org/2000/svg"
-                class="cursor-pointer"
+                class="cursor-pointer handle"
               >
                 <g clip-path="url(#clip0_951_5868)">
                   <path
@@ -70,34 +74,38 @@
               </svg>
               {{ element.name || element.title }}
             </div>
+
             <div class="flex items-center gap-2">
               بروزرسانی 3 ثانیه قبل
-              <svg
-                width="16"
-                height="15"
-                viewBox="0 0 16 15"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M7.83301 9.56152C9.00661 9.56152 9.95801 8.61013 9.95801 7.43652C9.95801 6.26292 9.00661 5.31152 7.83301 5.31152C6.6594 5.31152 5.70801 6.26292 5.70801 7.43652C5.70801 8.61013 6.6594 9.56152 7.83301 9.56152Z"
-                  stroke="#616161"
-                  stroke-width="1.5"
-                  stroke-miterlimit="10"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-                <path
-                  d="M0.75 8.05995V6.81329C0.75 6.07662 1.35208 5.46745 2.09583 5.46745C3.37792 5.46745 3.90208 4.56079 3.2575 3.4487C2.88917 2.8112 3.10875 1.98245 3.75333 1.61412L4.97875 0.912871C5.53833 0.579954 6.26083 0.778288 6.59375 1.33787L6.67167 1.47245C7.30917 2.58454 8.3575 2.58454 9.00208 1.47245L9.08 1.33787C9.41292 0.778288 10.1354 0.579954 10.695 0.912871L11.9204 1.61412C12.565 1.98245 12.7846 2.8112 12.4162 3.4487C11.7717 4.56079 12.2958 5.46745 13.5779 5.46745C14.3146 5.46745 14.9237 6.06954 14.9237 6.81329V8.05995C14.9237 8.79662 14.3217 9.40579 13.5779 9.40579C12.2958 9.40579 11.7717 10.3125 12.4162 11.4245C12.7846 12.0691 12.565 12.8908 11.9204 13.2591L10.695 13.9604C10.1354 14.2933 9.41292 14.095 9.08 13.5354L9.00208 13.4008C8.36458 12.2887 7.31625 12.2887 6.67167 13.4008L6.59375 13.5354C6.26083 14.095 5.53833 14.2933 4.97875 13.9604L3.75333 13.2591C3.10875 12.8908 2.88917 12.062 3.2575 11.4245C3.90208 10.3125 3.37792 9.40579 2.09583 9.40579C1.35208 9.40579 0.75 8.79662 0.75 8.05995Z"
-                  stroke="#616161"
-                  stroke-width="1.5"
-                  stroke-miterlimit="10"
-                  stroke-linecap="round"
-                  stroke-linejoin="round"
-                />
-              </svg>
+              <NuxtLink :to="`/admin/items/${element._id}`">
+                <svg
+                  width="16"
+                  height="15"
+                  viewBox="0 0 16 15"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M7.83301 9.56152C9.00661 9.56152 9.95801 8.61013 9.95801 7.43652C9.95801 6.26292 9.00661 5.31152 7.83301 5.31152C6.6594 5.31152 5.70801 6.26292 5.70801 7.43652C5.70801 8.61013 6.6594 9.56152 7.83301 9.56152Z"
+                    stroke="#616161"
+                    stroke-width="1.5"
+                    stroke-miterlimit="10"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                  <path
+                    d="M0.75 8.05995V6.81329C0.75 6.07662 1.35208 5.46745 2.09583 5.46745C3.37792 5.46745 3.90208 4.56079 3.2575 3.4487C2.88917 2.8112 3.10875 1.98245 3.75333 1.61412L4.97875 0.912871C5.53833 0.579954 6.26083 0.778288 6.59375 1.33787L6.67167 1.47245C7.30917 2.58454 8.3575 2.58454 9.00208 1.47245L9.08 1.33787C9.41292 0.778288 10.1354 0.579954 10.695 0.912871L11.9204 1.61412C12.565 1.98245 12.7846 2.8112 12.4162 3.4487C11.7717 4.56079 12.2958 5.46745 13.5779 5.46745C14.3146 5.46745 14.9237 6.06954 14.9237 6.81329V8.05995C14.9237 8.79662 14.3217 9.40579 13.5779 9.40579C12.2958 9.40579 11.7717 10.3125 12.4162 11.4245C12.7846 12.0691 12.565 12.8908 11.9204 13.2591L10.695 13.9604C10.1354 14.2933 9.41292 14.095 9.08 13.5354L9.00208 13.4008C8.36458 12.2887 7.31625 12.2887 6.67167 13.4008L6.59375 13.5354C6.26083 14.095 5.53833 14.2933 4.97875 13.9604L3.75333 13.2591C3.10875 12.8908 2.88917 12.062 3.2575 11.4245C3.90208 10.3125 3.37792 9.40579 2.09583 9.40579C1.35208 9.40579 0.75 8.79662 0.75 8.05995Z"
+                    stroke="#616161"
+                    stroke-width="1.5"
+                    stroke-miterlimit="10"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  />
+                </svg>
+              </NuxtLink>
             </div>
           </div>
+
           <div class="flex items-center gap-2 text-2sm">
             <svg
               width="17"
@@ -124,6 +132,7 @@
             </svg>
             آبشده نقد فردا مظنه خودکار
           </div>
+
           <div class="grid grid-cols-2 gap-3 mt-2">
             <div class="bg-white border border-strokesec rounded-10 p-2">
               <div
@@ -158,11 +167,11 @@
                   </svg>
                 </button>
                 <InputNumber
-                  v-model="element.amount"
+                  v-model="element.profitBuy"
                   inputId="integeronly"
                   fluid
                 />
-                <button>
+                <button @click="changeValue(element, 'profitBuy', -1)">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24px"
@@ -211,11 +220,11 @@
                   </svg>
                 </button>
                 <InputNumber
-                  v-model="element.amount"
+                  v-model="element.profitSell"
                   inputId="integeronly"
                   fluid
                 />
-                <button>
+                <button @click="changeValue(element, 'profitSell', -1)">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="24px"
@@ -239,32 +248,74 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { toast } from 'vue-sonner' // ایمپورت مستقیم
 import draggable from 'vuedraggable'
 
 let props = defineProps(['items'])
 let emit = defineEmits(['error'])
 
 let activeTab = ref(0)
+const myItems = ref([])
 
-// متغیر لوکال برای درگ اند دراپ
-const myItems = ref(props.items || [])
-
-// همگام سازی پراپس با متغیر لوکال
+// فقط سینک اولیه
 watch(
   () => props.items,
   newVal => {
     myItems.value = newVal || []
-  }
+  },
+  { immediate: true }
 )
+
+const activeItemsCount = computed(
+  () => myItems.value.filter(item => item.isBuy || item.isSell).length
+)
+const inactiveItemsCount = computed(
+  () => myItems.value.filter(item => !item.isBuy && !item.isSell).length
+)
+
+// لیست نمایشی برای درگ و دراپ
+const displayList = computed({
+  get () {
+    // فیلتر کردن بر اساس تب
+    if (activeTab.value === 0) {
+      return myItems.value.filter(item => item.isBuy || item.isSell)
+    } else {
+      return myItems.value.filter(item => !item.isBuy && !item.isSell)
+    }
+  },
+  set (reorderedList) {
+    // وقتی لیست جدید میاد (دراپ شد)، باید اون رو با آیتم‌های تب دیگه ترکیب کنیم
+    // تا دیتای اصلی (myItems) خراب نشه
+    const otherItems = myItems.value.filter(item => {
+      const isActive = item.isBuy || item.isSell
+      return activeTab.value === 0 ? !isActive : isActive
+    })
+
+    // ترکیب و آپدیت
+    myItems.value = [...reorderedList, ...otherItems]
+  }
+})
+
+// *** فانکشن اصلی تغییر ترتیب ***
+const onChange = event => {
+  // این ایونت "moved" رو برمی‌گردونه اگه جابجایی انجام شده باشه
+  if (event.moved) {
+    const { element, newIndex } = event.moved
+
+    // 1. تغییر sortOrder آیتم جابجا شده به ایندکس جدید
+    // (به علاوه 1 چون معمولا ایندکس از 0 ولی ترتیب از 1 شروع میشه)
+    element.sortOrder = newIndex
+    console.log(`آیتم ${element.name} رفت به جایگاه ${element.sortOrder}`)
+
+    // 2. ارسال فقط همین آیتم به سرور
+    sendRequest(element)
+  }
+}
 
 let debounceTimer = null
 
-// تابع مدیریت تغییر مقادیر و ارسال درخواست
 const changeValue = (item, field, amount) => {
   if (!item[field]) item[field] = 0
-
-  // محاسبه مقدار جدید
   const newValue = item[field] + amount
   if (newValue >= 0) {
     item[field] = newValue
@@ -272,20 +323,27 @@ const changeValue = (item, field, amount) => {
   }
 }
 
-// تابع ارسال درخواست به سرور با تاخیر
 const sendRequest = item => {
   if (debounceTimer) clearTimeout(debounceTimer)
 
   debounceTimer = setTimeout(async () => {
     try {
-      await $fetch('/api/admin/currency/updateCurrency', {
+      let result = await $fetch('/api/admin/currency/updateCurrency', {
         method: 'POST',
-        body: item
+        body: item // ارسال آبجکت تکی (با sortOrder جدید یا تغییر قیمت)
       })
+
+      toast.success(result.message)
+      console.log(result)
     } catch (error) {
-      emit('error')
-      console.log(error)
+      toast.error('error', error.data.data.message)
     }
   }, 500)
 }
 </script>
+
+<style>
+.drag-item {
+  border: 1px dashed black;
+}
+</style>

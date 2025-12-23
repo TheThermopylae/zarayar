@@ -4,14 +4,24 @@
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
-    
+
     <Transition>
       <EnterApp v-if="hideEnterAppSec" @enter="hideEnterAppSec = false" />
     </Transition>
+    <ClientOnly>
+      <Toaster
+        position="top-center"
+        dir="rtl"
+        :toastOptions="{
+          class: 'my-toast'
+        }"
+      />
+    </ClientOnly>
   </div>
 </template>
 
 <script setup>
+import 'vue-sonner/style.css'
 let { settings } = useSettings()
 
 useHead({
@@ -46,5 +56,10 @@ let hideEnterAppSec = ref(settings.value?.introPage.isActive)
 .v-enter-from,
 .v-leave-to {
   opacity: 0;
+}
+
+.my-toast {
+  backdrop-filter: blur(5px) saturate(180%) !important;
+  background-color: rgba(255, 255, 255, 0.5) !important;
 }
 </style>

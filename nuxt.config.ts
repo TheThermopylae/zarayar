@@ -46,9 +46,8 @@ export default defineNuxtConfig({
 
   modules: [
     '@primevue/nuxt-module',
-    '@vite-pwa/nuxt' // <--- این خط باید اضافه شود
+    '@vite-pwa/nuxt',
   ],
-
   runtimeConfig: {
     API_BASE_URL: process.env.API_BASE_URL || 'https://api.tutunchi.ir',
     public: {

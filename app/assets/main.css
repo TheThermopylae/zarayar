@@ -325,12 +325,21 @@ button {
     cursor: pointer;
 }
 
+.ltr-dir {
+    direction: ltr;
+}
+
 .req {
     @apply after:content-['*'] after:text-red-500
 }
 
+/* تغییر در اینجا انجام شد */
 .toggle-switch {
-    @apply toggle border-[#BFBFBF] bg-[#BFBFBF] checked:border-[#7AB73E] checked:bg-[#7AB73E] text-white
+    /* ltr-dir را از اینجا حذف کنید */
+    @apply toggle border-[#BFBFBF] bg-[#BFBFBF] checked:border-[#7AB73E] checked:bg-[#7AB73E] text-white;
+    
+    /* ویژگی CSS را مستقیم اینجا بنویسید */
+    direction: ltr;
 }
 
 .checkbox-c {

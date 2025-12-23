@@ -3,14 +3,14 @@
     <div class="grid grid-cols-3 items-center text-xs">
       <div
         @click=";(visible = true), (side = 'buy')"
-        class="text-center bg-white border border-stroke py-2 px-3 rounded-10 font-medium cursor-pointer text-[#96A825]"
+        class="text-center bg-white border border-stroke py-2 px-3 rounded-10 font-bold text-sm cursor-pointer text-[#96A825]"
       >
         <NumberFlow :value="props.data.amount" />
       </div>
       <h4 class="text-center text-graydark">{{ props.data.name }}</h4>
       <div
         @click=";(visible = true), (side = 'sell')"
-        class="text-center bg-white border border-stroke py-2 px-3 rounded-10 font-medium cursor-pointer text-red-400"
+        class="text-center bg-white border border-stroke py-2 px-3 rounded-10 font-bold text-sm cursor-pointer text-red-400"
       >
         <NumberFlow :value="props.data.amount" />
       </div>
