@@ -13,7 +13,7 @@
       <h2>{{ settings?.introPage.description }}</h2>
     </div>
     <button
-      class="bg-[#DDB976] rounded-2xl p-2 text-black flex items-center gap-5 absolute left-1/2 -translate-x-1/2 bottom-5 font-bold"
+      class="bg-[#DDB976] rounded-2xl p-2 text-black flex items-center gap-5 absolute left-1/2 -translate-x-1/2 bottom-14 font-bold"
       @click="$emit('enter')"
     >
       ورود به برنامه

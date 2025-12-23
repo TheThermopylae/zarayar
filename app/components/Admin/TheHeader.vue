@@ -318,116 +318,296 @@
         طلا
       </NuxtLink>
     </div>
-    <Drawer v-model:visible="visible" pt:root="!rounded-none" position="right">
-      <template #header>
-        <img src="/img/logo.png" alt="logo" />
-      </template>
-      <ul>
-        <li>
+    <Drawer
+      v-model:visible="visible"
+      pt:root="!rounded-none !bg-[#F2F3F6]"
+      pt:content="!relative"
+      position="full"
+    >
+      <section
+        class="rounded-2xl p-3 bg-white flex flex-col items-center font-bold"
+      >
+        <div
+          class="size-12 flex justify-center items-center bg-[#EFEFEF] rounded-full mb-2"
+        >
+          <svg
+            width="35"
+            height="35"
+            viewBox="0 0 35 35"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M17.5 4.01038C14.4797 4.01038 12.0312 6.45882 12.0312 9.47913C12.0312 12.4994 14.4797 14.9479 17.5 14.9479C20.5203 14.9479 22.9688 12.4994 22.9688 9.47913C22.9688 6.45882 20.5203 4.01038 17.5 4.01038ZM9.84375 9.47913C9.84375 5.2507 13.2716 1.82288 17.5 1.82288C21.7284 1.82288 25.1562 5.2507 25.1562 9.47913C25.1562 13.7076 21.7284 17.1354 17.5 17.1354C13.2716 17.1354 9.84375 13.7076 9.84375 9.47913Z"
+              fill="#616161"
+            />
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M6.198 27.0833C6.198 22.7973 9.67246 19.3229 13.9584 19.3229H21.0417C25.3277 19.3229 28.8022 22.7973 28.8022 27.0833C28.8022 30.4488 26.0739 33.177 22.7084 33.177H12.2917C8.92626 33.177 6.198 30.4488 6.198 27.0833ZM13.9584 21.5104C10.8806 21.5104 8.3855 24.0055 8.3855 27.0833C8.3855 29.2407 10.1344 30.9895 12.2917 30.9895H22.7084C24.8658 30.9895 26.6147 29.2407 26.6147 27.0833C26.6147 24.0055 24.1196 21.5104 21.0417 21.5104H13.9584Z"
+              fill="#616161"
+            />
+          </svg>
+        </div>
+        {{ userData?.fname || 'بدون' }} {{ userData?.lname || 'نام' }}
+      </section>
+      <ul class="mt-4 space-y-0.5">
+        <li v-if="userData.role == 'ADMIN'">
           <NuxtLink
+            @click="visible = false"
             to="/admin"
-            :class="{ 'bg-primary text-white': route.path == '/admin' }"
-            class="block px-3 py-2 rounded-md"
-            >مدیریت سامانه</NuxtLink
+            class="p-3 bg-white flex justify-between items-center rounded-t-2xl"
           >
+            <div class="flex items-center gap-2">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M1.25 8C1.25 4.27208 4.27208 1.25 8 1.25H16C19.7279 1.25 22.75 4.27208 22.75 8V16C22.75 19.7279 19.7279 22.75 16 22.75H8C4.27208 22.75 1.25 19.7279 1.25 16V8ZM8 2.75C5.10051 2.75 2.75 5.10051 2.75 8V16C2.75 18.8995 5.10051 21.25 8 21.25H16C18.8995 21.25 21.25 18.8995 21.25 16V8C21.25 5.10051 18.8995 2.75 16 2.75H8Z"
+                  fill="#616161"
+                />
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M12 7.00732C12.4142 7.00732 12.75 7.34311 12.75 7.75732L12.75 16.2426C12.75 16.6568 12.4142 16.9926 12 16.9926C11.5857 16.9926 11.25 16.6568 11.25 16.2426L11.25 7.75731C11.25 7.3431 11.5858 7.00731 12 7.00732Z"
+                  fill="#616161"
+                />
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M16.9999 12C16.9999 12.4142 16.6641 12.75 16.2499 12.75L7.76464 12.75C7.35043 12.75 7.01464 12.4142 7.01464 12C7.01465 11.5857 7.35043 11.25 7.76465 11.25L16.2499 11.25C16.6641 11.25 16.9999 11.5858 16.9999 12Z"
+                  fill="#616161"
+                />
+              </svg>
+              پنل ادمین
+            </div>
+            <DrawerArrow />
+          </NuxtLink>
         </li>
         <li>
           <NuxtLink
-            to="/admin/add-branch"
-            active-class="bg-primary text-white"
-            class="block px-3 py-2 rounded-md"
-            >افزودن شعبه</NuxtLink
+            @click="visible = false"
+            to="/orders"
+            class="p-3 bg-white flex justify-between items-center"
+            :class="{ 'rounded-t-2xl': userData.role != 'ADMIN' }"
           >
+            <div class="flex items-center gap-2">
+              <svg
+                width="20"
+                height="21"
+                viewBox="0 0 20 21"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M0 0.75C0 0.335786 0.335786 0 0.75 0H18.75C19.1642 0 19.5 0.335786 19.5 0.75C19.5 1.16421 19.1642 1.5 18.75 1.5H0.75C0.335786 1.5 0 1.16421 0 0.75Z"
+                  fill="#616161"
+                />
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M6.5 14.25C6.5 13.8358 6.83579 13.5 7.25 13.5H12.25C12.6642 13.5 13 13.8358 13 14.25C13 14.6642 12.6642 15 12.25 15H7.25C6.83579 15 6.5 14.6642 6.5 14.25Z"
+                  fill="#616161"
+                />
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M5.5 11.25C5.5 10.8358 5.83579 10.5 6.25 10.5H13.25C13.6642 10.5 14 10.8358 14 11.25C14 11.6642 13.6642 12 13.25 12H6.25C5.83579 12 5.5 11.6642 5.5 11.25Z"
+                  fill="#616161"
+                />
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M4.5 8.25C4.5 7.83579 4.83579 7.5 5.25 7.5H14.25C14.6642 7.5 15 7.83579 15 8.25C15 8.66421 14.6642 9 14.25 9H5.25C4.83579 9 4.5 8.66421 4.5 8.25Z"
+                  fill="#616161"
+                />
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M1.75 3C2.16421 3 2.5 3.33579 2.5 3.75V15.75C2.5 17.5449 3.95507 19 5.75 19H13.75C15.5449 19 17 17.5449 17 15.75V3.75C17 3.33579 17.3358 3 17.75 3C18.1642 3 18.5 3.33579 18.5 3.75V15.75C18.5 18.3734 16.3734 20.5 13.75 20.5H5.75C3.12665 20.5 1 18.3734 1 15.75V3.75C1 3.33579 1.33579 3 1.75 3Z"
+                  fill="#616161"
+                />
+              </svg>
+              خرید و فروش ها
+            </div>
+            <DrawerArrow />
+          </NuxtLink>
         </li>
         <li>
           <NuxtLink
-            to="/admin/add-operator"
-            active-class="bg-primary text-white"
-            class="block px-3 py-2 rounded-md"
-            >افزودن اوپراتور</NuxtLink
+            @click="visible = false"
+            to="/remaining"
+            class="p-3 bg-white flex justify-between items-center"
           >
+            <div class="flex items-center gap-2">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M7 6.25C6.75816 6.25 6.52888 6.26842 6.31145 6.3041C6.30415 6.3053 6.29684 6.30639 6.2895 6.30737C5.19556 6.4538 4.32635 6.95388 3.72467 7.70685C3.11906 8.46475 2.75 9.52358 2.75 10.8333C2.75 11.2475 2.41421 11.5833 2 11.5833C1.58579 11.5833 1.25 11.2475 1.25 10.8333C1.25 9.24175 1.70094 7.83658 2.55283 6.77048C3.40651 5.70213 4.6283 5.01896 6.07956 4.8221C6.37866 4.77366 6.6857 4.75 7 4.75H17C17.2705 4.75 17.5642 4.7604 17.8613 4.8114C19.3248 4.99743 20.5604 5.67626 21.4256 6.7456C22.2906 7.81478 22.75 9.22942 22.75 10.8333V16.1667C22.75 17.9231 22.199 19.4509 21.1722 20.5463C20.1412 21.646 18.6856 22.25 17 22.25H9.5C9.08579 22.25 8.75 21.9142 8.75 21.5C8.75 21.0858 9.08579 20.75 9.5 20.75H17C18.3144 20.75 19.3588 20.2873 20.0778 19.5204C20.801 18.7491 21.25 17.6102 21.25 16.1667V10.8333C21.25 9.51458 20.8744 8.44921 20.2594 7.68905C19.6483 6.93367 18.7659 6.43507 17.6577 6.29762C17.6446 6.296 17.6317 6.29404 17.6187 6.29174C17.4426 6.26043 17.2435 6.25 17 6.25H7Z"
+                  fill="#616161"
+                />
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M9.78003 14.93C9.78003 13.7537 8.8264 12.8 7.65003 12.8C6.67534 12.8 5.85356 13.4547 5.60043 14.3483C5.4184 14.3166 5.23115 14.3 5.04003 14.3C4.69511 14.3 4.36277 14.3539 4.05099 14.4538C4.28423 12.6741 5.80667 11.3 7.65003 11.3C9.65482 11.3 11.28 12.9253 11.28 14.93C11.28 16.7734 9.90602 18.2959 8.1263 18.5291C8.22613 18.2173 8.28003 17.885 8.28003 17.54C8.28003 17.3489 8.26348 17.1617 8.23174 16.9796C9.12535 16.7265 9.78003 15.9047 9.78003 14.93Z"
+                  fill="#616161"
+                />
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M4.77015 15.6801C5.94651 15.6801 6.90015 16.6337 6.90015 17.8101C6.90015 18.9864 5.94651 19.9401 4.77015 19.9401C3.59378 19.9401 2.64015 18.9864 2.64015 17.8101C2.64015 16.6337 3.59378 15.6801 4.77015 15.6801ZM8.40015 17.8101C8.40015 15.8053 6.77494 14.1801 4.77015 14.1801C2.76535 14.1801 1.14015 15.8053 1.14015 17.8101C1.14015 19.8148 2.76535 21.4401 4.77015 21.4401C6.77494 21.4401 8.40015 19.8148 8.40015 17.8101Z"
+                  fill="#616161"
+                />
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M2.61129 7.06296C2.37353 4.91701 3.8201 2.91654 5.94664 2.68093L15.7912 1.59023C17.9177 1.35462 19.7671 2.98993 20.0049 5.13588L20.094 5.94048L18.6031 6.10565L18.514 5.30105C18.3579 3.89205 17.1756 2.94601 15.9563 3.0811L6.11182 4.17181C4.89253 4.3069 3.94606 5.48878 4.10216 6.89778L2.61129 7.06296Z"
+                  fill="#616161"
+                />
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M15.25 13.5C15.25 11.9812 16.4812 10.75 18 10.75H21.1429C22.0305 10.75 22.75 11.4695 22.75 12.3571V14.6429C22.75 15.5305 22.0305 16.25 21.1429 16.25H18C16.4812 16.25 15.25 15.0188 15.25 13.5ZM16.75 13.5C16.75 14.1904 17.3096 14.75 18 14.75H21.1429C21.202 14.75 21.25 14.702 21.25 14.6429V12.3571C21.25 12.298 21.202 12.25 21.1429 12.25H18C17.3096 12.25 16.75 12.8096 16.75 13.5Z"
+                  fill="#616161"
+                />
+              </svg>
+              مانده حساب
+            </div>
+            <DrawerArrow />
+          </NuxtLink>
         </li>
         <li>
           <NuxtLink
-            to="/admin/daily-trades-balance"
-            active-class="bg-primary text-white"
-            class="block px-3 py-2 rounded-md"
-            >تراز روزانه</NuxtLink
+            @click="visible = false"
+            to="/auth"
+            class="p-3 bg-white flex justify-between items-center"
           >
+            <div class="flex items-center gap-2">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M19.5303 7.21967C19.8232 7.51256 19.8232 7.98744 19.5303 8.28033L11.6112 16.1995C10.5373 17.2734 8.79607 17.2734 7.72213 16.1995L4.46967 12.947C4.17678 12.6541 4.17678 12.1792 4.46967 11.8863C4.76256 11.5934 5.23744 11.5934 5.53033 11.8863L8.78279 15.1388C9.27094 15.6269 10.0624 15.6269 10.5506 15.1388L18.4697 7.21967C18.7626 6.92678 19.2374 6.92678 19.5303 7.21967Z"
+                  fill="#616161"
+                />
+              </svg>
+              احراز هویت
+            </div>
+            <DrawerArrow />
+          </NuxtLink>
         </li>
         <li>
           <NuxtLink
-            to="/admin/sms"
-            active-class="bg-primary text-white"
-            class="block px-3 py-2 rounded-md"
-            >مدیریت اس ام اس ها</NuxtLink
+            @click="visible = false"
+            to="/deposit"
+            class="p-3 bg-white flex justify-between items-center"
           >
+            <div class="flex items-center gap-2">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M21.1278 6.18272C21.1276 6.18332 21.1275 6.18392 21.1273 6.18453L17.013 19.3941C16.2487 21.8391 12.8232 21.8799 12.0108 19.4469L12.01 19.4443L10.7875 15.8277C10.3768 14.5746 9.39515 13.6266 8.17816 13.2212C8.17775 13.2211 8.17735 13.221 8.17694 13.2208L4.55221 11.9998C2.12266 11.1856 2.16644 7.74528 4.58179 6.98644C4.58215 6.98632 4.58252 6.98621 4.58289 6.98609L17.8396 2.87828L17.8434 2.87709C19.8553 2.24193 21.755 4.12582 21.1278 6.18272ZM17.3938 1.44605C20.5863 0.43985 23.5345 3.43998 22.5618 6.62293L18.4449 19.8409C17.2516 23.6581 11.8683 23.7518 10.5886 19.9235C10.5884 19.923 10.5882 19.9225 10.5881 19.922L9.36534 16.3046L9.36293 16.2973C9.10562 15.5096 8.48677 14.9048 7.70334 14.6441L7.70072 14.6432L4.07556 13.4221C4.07563 13.4221 4.07549 13.4221 4.07556 13.4221C0.276533 12.1487 0.321192 6.75107 4.13385 5.55487L17.3918 1.44668C17.3925 1.44647 17.3931 1.44626 17.3938 1.44605Z"
+                  fill="#616161"
+                />
+              </svg>
+              ارسال فیش
+            </div>
+            <DrawerArrow />
+          </NuxtLink>
         </li>
         <li>
           <NuxtLink
-            to="/admin/users"
-            active-class="bg-primary text-white"
-            class="block px-3 py-2 rounded-md"
-            >مدیریت کاربران</NuxtLink
+            @click="visible = false"
+            to="/deposit"
+            class="p-3 bg-white flex justify-between items-center"
           >
-        </li>
-        <li>
-          <NuxtLink
-            to="/admin/transfers"
-            active-class="bg-primary text-white"
-            class="block px-3 py-2 rounded-md"
-            >مدیریت حواله ها</NuxtLink
-          >
-        </li>
-        <li>
-          <NuxtLink
-            to="/admin/transfers"
-            active-class="bg-primary text-white"
-            class="block px-3 py-2 rounded-md"
-            >مدیریت فیش ها</NuxtLink
-          >
-        </li>
-        <li>
-          <NuxtLink
-            to="/admin/trades"
-            active-class="bg-primary text-white"
-            class="block px-3 py-2 rounded-md"
-            >مدیریت معامله ها</NuxtLink
-          >
-        </li>
-        <li>
-          <NuxtLink
-            to="/admin/trades/reports"
-            active-class="bg-primary text-white"
-            class="block px-3 py-2 rounded-md"
-            >گزارشات معامله ها</NuxtLink
-          >
-        </li>
-        <li>
-          <NuxtLink
-            to="/admin/orders"
-            active-class="bg-primary text-white"
-            class="block px-3 py-2 rounded-md"
-            >خرید و فروش ها</NuxtLink
-          >
-        </li>
-        <li>
-          <NuxtLink
-            to="/admin/items"
-            active-class="bg-primary text-white"
-            class="block px-3 py-2 rounded-md"
-            >مدیریت آیتم ها</NuxtLink
-          >
-        </li>
-        <li>
-          <NuxtLink
-            to="/admin/customers-categories"
-            active-class="bg-primary text-white"
-            class="block px-3 py-2 rounded-md"
-            >دسته بندی مشتریان</NuxtLink
-          >
+            <div class="flex items-center gap-2">
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M1.25 8C1.25 4.27208 4.27208 1.25 8 1.25H16C19.7279 1.25 22.75 4.27208 22.75 8V16C22.75 19.7279 19.7279 22.75 16 22.75H8C4.27208 22.75 1.25 19.7279 1.25 16V8ZM8 2.75C5.10051 2.75 2.75 5.10051 2.75 8V16C2.75 18.8995 5.10051 21.25 8 21.25H16C18.8995 21.25 21.25 18.8995 21.25 16V8C21.25 5.10051 18.8995 2.75 16 2.75H8Z"
+                  fill="#616161"
+                />
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M12 7.00732C12.4142 7.00732 12.75 7.34311 12.75 7.75732L12.75 16.2426C12.75 16.6568 12.4142 16.9926 12 16.9926C11.5857 16.9926 11.25 16.6568 11.25 16.2426L11.25 7.75731C11.25 7.3431 11.5858 7.00731 12 7.00732Z"
+                  fill="#616161"
+                />
+                <path
+                  fill-rule="evenodd"
+                  clip-rule="evenodd"
+                  d="M16.9999 12C16.9999 12.4142 16.6641 12.75 16.2499 12.75L7.76464 12.75C7.35043 12.75 7.01464 12.4142 7.01464 12C7.01465 11.5857 7.35043 11.25 7.76465 11.25L16.2499 11.25C16.6641 11.25 16.9999 11.5858 16.9999 12Z"
+                  fill="#616161"
+                />
+              </svg>
+              ثبت حواله
+            </div>
+            <DrawerArrow />
+          </NuxtLink>
         </li>
       </ul>
+      <div class="absolute bottom-0 right-0 p-5 w-full">
+        <button
+          class="bg-red-200 w-full px-3 py-2 text-red-500 flex items-center gap-2 rounded-2xl"
+          @click="showDialog"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20px"
+            height="20px"
+            viewBox="0 0 24 24"
+          >
+            <g fill="none">
+              <path
+                d="m12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.018-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z"
+              />
+              <path
+                fill="currentColor"
+                d="M12 3a1 1 0 0 1 .117 1.993L12 5H7a1 1 0 0 0-.993.883L6 6v12a1 1 0 0 0 .883.993L7 19h4.5a1 1 0 0 1 .117 1.993L11.5 21H7a3 3 0 0 1-2.995-2.824L4 18V6a3 3 0 0 1 2.824-2.995L7 3zm5.707 5.464l2.828 2.829a1 1 0 0 1 0 1.414l-2.828 2.829a1 1 0 1 1-1.414-1.415L17.414 13H12a1 1 0 1 1 0-2h5.414l-1.121-1.121a1 1 0 0 1 1.414-1.415"
+              />
+            </g>
+          </svg>
+          خروج از حساب
+        </button>
+      </div>
     </Drawer>
     <!-- admin message -->
     <Drawer
@@ -454,6 +634,8 @@
 </template>
 
 <script setup>
+let { userData } = userAuth()
+
 let route = useRoute()
 
 let showMenu = ref(false)

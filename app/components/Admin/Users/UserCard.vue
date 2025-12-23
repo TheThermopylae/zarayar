@@ -26,7 +26,6 @@
         </svg>
         {{ props.data.fname || 'بدون' }} {{ props.data.lname || 'نام' }}
       </div>
-      <!-- v-if="userData?._id != props.data?._id" -->
       <div class="flex items-center justify-between gap-3">
         <button class="submenu" @click="showMenu = !showMenu">
           <svg
@@ -112,7 +111,7 @@
         >
           وضعیت مشتری
           <span
-            v-if="props.data.isStatus"
+            v-if="props.data.status == 'active'"
             class="border border-cgreen rounded-10 bg-[#96A8254D] text-cgreen px-1 py-0.5"
             >فعال</span
           >

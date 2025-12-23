@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="flex justify-between items-center text-2sm mb-2">
+    <div class="flex justify-between items-center text-2sm mb-2 gap-2">
       <div class="flex items-center gap-2">
         <svg
           width="20"
@@ -40,19 +40,25 @@
             stroke-linejoin="round"
           />
         </svg>
-        به روزرسانی قیمت: هر یک دقیقه
+        به روزرسانی قیمت: {{ date }}
       </div>
-      <div
-        class="bg-[#E8436233] flex items-center gap-1 rounded-10 px-2 py-1.5 text-[#E84362]"
-      >
-        <div class="size-[5px] rounded-full bg-[#E84362]"></div>
-        زنده
+      
+      <div class="h-[1px] flex-grow bg-stroke"></div>
+      
+      <div class="bg-green-500/20 flex items-center gap-2 rounded-10 px-2 py-1.5 text-green-500 overflow-visible">
+        <div class="relative flex items-center justify-center size-[6px]">
+           <span class="custom-halo absolute bg-green-500 rounded-full"></span>
+           <span class="relative size-[6px] bg-green-500 rounded-full z-10"></span>
+        </div>
+        <span class="relative z-10 text-xs">زنده</span>
       </div>
+
     </div>
+
     <div
-      class="flex justify-between border border-[#0000001A] rounded-10 px-3 py-2 text-sm mb-2"
+      class="grid grid-cols-3 border border-[#0000001A] rounded-10 px-3 py-2 text-sm mb-2"
     >
-      <div class="flex items-center gap-2 font-bold text-cgreen">
+      <div class="flex justify-center items-center gap-2 font-bold text-cgreen">
         <svg
           width="24"
           height="24"
@@ -74,7 +80,8 @@
         </svg>
         بخرید
       </div>
-      <div class="flex items-center gap-2 font-bold text-cred">
+      <div />
+      <div class="flex justify-center items-center gap-2 font-bold text-cred">
         <svg
           width="24"
           height="24"
@@ -97,6 +104,7 @@
         بفروشید
       </div>
     </div>
+
     <div
       class="border border-[#0000001A] rounded-10 p-2 bg-[#FAFAFA] space-y-2.5"
     >
@@ -113,30 +121,63 @@
 </template>
 
 <script setup>
-let { showToast } = useToastComp()
-
-let { data, pending } = useLazyFetch('/api/admin/currency/getCurrency', {
-  credentlals: 'include'
-})
-
-let config = useRuntimeConfig()
 import io from 'socket.io-client';
 
+let { showToast } = useToastComp()
+let config = useRuntimeConfig()
+
+// 1. تعریف متغیر ری‌اکتیو برای ساعت
+let date = ref('در حال دریافت...')
+
+// 2. تابع برای گرفتن ساعت و دقیقه جاری
+const updateTime = () => {
+  const now = new Date()
+  const hours = String(now.getHours()).padStart(2, '0')
+  const minutes = String(now.getMinutes()).padStart(2, '0')
+  date.value = `${hours}:${minutes}`
+}
+
+let { data, pending } = useLazyFetch('/api/admin/currency/getCurrency', {
+  credentials: 'include'
+})
+
+// 3. اولین بار که صفحه لود میشه ساعت رو بگیر
+updateTime()
+
 const socket = io(config.public.API_BASE_URL, {
-  // این خط مهم است: فقط از polling استفاده کن و سراغ websocket نرو
   transports: ["polling"], 
-  
-  // تنظیمات اضافی که شاید نیاز باشد
   withCredentials: true,
   path: "/socket.io/" 
 });
 
 socket.on('price:update', items => {
   data.value = items
-  console.log(data.value)
+  // 4. هر بار که دیتای جدید از سوکت اومد، ساعت رو هم آپدیت کن
+  updateTime()
+  console.log('kir')
 })
 
 function showToastFunc (toast) {
   showToast(toast.type, toast.title, toast.text)
 }
 </script>
+
+<style scoped>
+.custom-halo {
+  width: 100%;
+  height: 100%;
+  opacity: 0.7;
+  animation: pulse-big 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+@keyframes pulse-big {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  70%, 100% {
+    transform: scale(3.5);
+    opacity: 0;
+  }
+}
+</style>

@@ -64,12 +64,11 @@
       <img v-else :src="settings?.headerSettings.logoUrl" alt="logo" />
     </div>
     <div class="flex items-center gap-3">
-      <NuxtLink
-        to="/"
-        class="border border-cgreen text-cgreen px-1.5 py-1 text-2sm rounded-10 hover:bg-cgreen hover:text-white transition"
+      <span
+        class="border border-cgreen text-cgreen bg-cgreen/20 px-1.5 py-1 text-2sm rounded-10"
       >
         مدیر آنلاین
-      </NuxtLink>
+      </span>
       <NuxtLink to="/">
         <svg
           width="24"

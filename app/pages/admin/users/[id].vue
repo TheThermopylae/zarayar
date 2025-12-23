@@ -10,10 +10,7 @@
           <label class="block mb-1.5">نام خانوادگی</label>
           <input type="text" class="cinput" v-model="data.lname" />
         </div>
-        <div>
-          <label class="block mb-1.5">نام کاربری</label>
-          <input type="text" class="cinput" v-model="data.username" />
-        </div>
+
         <div>
           <label class="block mb-1.5">شماره موبایل</label>
           <input
@@ -189,8 +186,6 @@ async function addUserFunc () {
   if (
     !data.value.fname ||
     !data.value.lname ||
-    !data.value.username ||
-    !data.value.username ||
     !data.value.nationalityid ||
     !data.value.Accounttype ||
     !data.value.Accountgroup ||
