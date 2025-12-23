@@ -88,11 +88,12 @@
           </svg>
           ابزار ها
         </button>
-        <span
+        <button
+          @click="visibleUsers = true"
           class="px-2 py-1.5 rounded-10 text-graydark bg-[#EFEFEF] flex items-center gap-2"
         >
           مشتری آنلاین 37
-        </span>
+        </button>
       </div>
       <div
         class="flex items-center gap-2 text-xs"
@@ -630,11 +631,22 @@
         pt:root="!bg-[#B0E37C] w-full"
       />
     </Drawer>
+    <Drawer
+      v-model:visible="visibleUsers"
+      header="کاربران آنلاین"
+      position="bottom"
+      style="height: auto"
+    >
+      <div></div>
+    </Drawer>
   </header>
 </template>
 
 <script setup>
 let { userData } = userAuth()
+let { users } = useUsers()
+
+console.log(users.value)
 
 let route = useRoute()
 
@@ -645,6 +657,8 @@ let visible = ref(false)
 let visibleAdmin = ref(false)
 
 let adminMessage = ref('')
+
+let visibleUsers = ref(false)
 
 function backBtn () {
   history.back()

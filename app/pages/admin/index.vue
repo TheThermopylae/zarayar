@@ -24,8 +24,6 @@ let { data: items, pending } = await useFetch(
   }
 )
 
-console.log(items.value)
-
 function showError (text) {
   showToast('error', 'خطا', text)
 }

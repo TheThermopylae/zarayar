@@ -1,9 +1,10 @@
 <template>
   <NuxtLoadingIndicator color="#DDB976" />
-  <div>
+  <div class="relative overflow-x-hidden min-h-screen">
     <NuxtLayout>
       <NuxtPage />
     </NuxtLayout>
+    
     <Transition>
       <EnterApp v-if="hideEnterAppSec" @enter="hideEnterAppSec = false" />
     </Transition>
@@ -21,14 +22,20 @@ let hideEnterAppSec = ref(settings.value?.introPage.isActive)
 </script>
 
 <style>
+/* انیمیشن اسلایدی صفحات */
 .page-enter-active,
 .page-leave-active {
   transition: all 0.4s;
 }
-.page-enter-from,
-.page-leave-to {
+
+.page-enter-from {
+  transform: translateX(100%);
   opacity: 0;
-  filter: blur(1rem);
+}
+
+.page-leave-to {
+  transform: translateX(-100%);
+  opacity: 0;
 }
 
 .v-enter-active,

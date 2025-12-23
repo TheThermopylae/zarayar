@@ -8,10 +8,8 @@ export default defineNuxtPlugin(async nuxtApp => {
     })
 
     users.value = data
-    console.log(users.value)
   } catch (error) {
     console.log(error)
-
     users.value = null
   }
 })
