@@ -1,6 +1,8 @@
 <template>
   <section class="mt-5">
-    <div class="flex justify-between items-center text-xs mb-3 text-graydark">
+    <div
+      class="flex justify-between items-center gap-2 text-xs mb-3 text-graydark"
+    >
       <div class="flex items-center gap-1">
         <svg
           width="20"
@@ -42,6 +44,8 @@
         </svg>
         <h2>معاملات امروز</h2>
       </div>
+      <div class="h-[1px] flex-grow bg-stroke"></div>
+
       <NuxtLink
         to="/orders"
         class="flex items-center gap-2 bg-[#F5F7FA] px-2 py-1.5 rounded-10"
@@ -66,6 +70,7 @@
 
     <article
       class="px-2 py-3 rounded-2xl border border-stroke mb-2 last:m-0"
+      v-if="props.data.length > 0"
       v-for="item in props.data"
       :key="item._id"
     >
@@ -96,7 +101,7 @@
         </div>
         <div class="flex items-center gap-1">
           <span class="bg-[#EFEFEF] text-graydark px-2 py-1 rounded-10">{{
-            toPersianDate(item.createdAt)
+            toPersianDate(item.createdAt).split(',')[1]
           }}</span>
           <span
             class="text-[#966D22] bg-pending px-2 py-1 rounded-10"
@@ -121,6 +126,10 @@
         ریال
       </p>
     </article>
+    <div v-else class="flex flex-col items-center">
+      <img src="/no-orders.svg" />
+      <p class="mt-2 text-sm">امروز معامله جدیدی در اپلیکیشن باز نکرده اید.</p>
+    </div>
   </section>
 </template>
 

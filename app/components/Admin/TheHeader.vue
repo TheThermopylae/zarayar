@@ -646,7 +646,7 @@
 let { userData } = userAuth()
 let { users } = useUsers()
 
-console.log(users.value)
+ 
 
 let route = useRoute()
 

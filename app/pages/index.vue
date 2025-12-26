@@ -2,7 +2,7 @@
   <div>
     <HomeWarnSection />
     <HomeItemsSection @refreshOrders="refresh" />
-    <HomeRecentOrders :data="data" :pending="pending" />
+    <HomeRecentOrders :data="todayOrders" :pending="pending" />
   </div>
 </template>
 
@@ -15,7 +15,23 @@ definePageMeta({
   title: 'زرعیار آبشده'
 })
 
-let { data, refresh, pending } = useLazyFetch('/api/user/orders/getOrders', {
+let { data, refresh, pending } = await useFetch('/api/user/orders/getOrders', {
   credentials: 'include'
 })
+
+const now = new Date()
+
+const year = now.getFullYear()
+const month = now.getMonth() + 1
+const day = now.getDate()
+
+let todayOrders = computed(() => {
+  return data.value
+    ? data.value.filter(
+        order => order.createdAt.split('T')[0] == `${year}-${month}-${day}`
+      )
+    : []
+})
+
+console.log(todayOrders.value)
 </script>

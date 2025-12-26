@@ -1,5 +1,5 @@
 <template>
-  <section class="rounded-2xl p-3 flex items-center gap-2 text-2sm bg-[#FFF3DB] mb-5">
+  <section class="rounded-2xl p-3 flex items-center gap-2 text-[13px] bg-[#FFF3DB] mb-5">
     <svg
       width="24"
       height="24"

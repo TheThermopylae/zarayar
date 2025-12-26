@@ -83,7 +83,7 @@ let { data: users } = await useFetch('/api/admin/users/getUsers', {
   credentials: 'include'
 })
 
-console.log(users.value)
+ 
 let data = reactive({
   member: 'users',
   title: '',

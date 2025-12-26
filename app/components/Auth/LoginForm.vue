@@ -73,7 +73,7 @@ async function loginFunc () {
   try {
     loading.value = true
 
-    console.log(config.public.API_BASE_URL)
+       
     let data = await $fetch(`${config.public.API_BASE_URL}/auth`, {
       method: 'POST',
       body: { phone: phone.value }

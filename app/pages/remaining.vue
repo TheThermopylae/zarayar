@@ -250,5 +250,5 @@ definePageMeta({
 
 let { userData } = userAuth()
 
-console.log(userData.value)
+ 
 </script>

@@ -318,7 +318,8 @@
 body {
     min-height: 100vh;
     color: #616161;
-    overflow: hidden;
+    overflow-x: hidden;
+    touch-action: manipulation;
 }
 
 button {
@@ -337,7 +338,7 @@ button {
 .toggle-switch {
     /* ltr-dir را از اینجا حذف کنید */
     @apply toggle border-[#BFBFBF] bg-[#BFBFBF] checked:border-[#7AB73E] checked:bg-[#7AB73E] text-white;
-    
+
     /* ویژگی CSS را مستقیم اینجا بنویسید */
     direction: ltr;
 }

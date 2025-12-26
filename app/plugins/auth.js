@@ -17,7 +17,7 @@ export default defineNuxtPlugin(async nuxtApp => {
     // ۲. اگر کاربر لاگین نبود و الان هم توی صفحه لاگین نیست، ریدایرکت بشه
     // فرض کردم آدرس صفحه لاگینت '/auth/login' هست. اگر '/login' هست تغییرش بده
     if (route.path !== '/auth/login') {
-      return navigateTo('/auth/login')
+      // return navigateTo('/auth/login')
     }
   }
 })

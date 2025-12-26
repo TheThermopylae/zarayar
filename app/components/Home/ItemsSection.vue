@@ -154,7 +154,6 @@ socket.on('price:update', items => {
   data.value = items
   // 4. هر بار که دیتای جدید از سوکت اومد، ساعت رو هم آپدیت کن
   updateTime()
-  console.log('kir')
 })
 
 function showToastFunc (toast) {

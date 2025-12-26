@@ -305,7 +305,7 @@ const onChange = event => {
     // 1. تغییر sortOrder آیتم جابجا شده به ایندکس جدید
     // (به علاوه 1 چون معمولا ایندکس از 0 ولی ترتیب از 1 شروع میشه)
     element.sortOrder = newIndex
-    console.log(`آیتم ${element.name} رفت به جایگاه ${element.sortOrder}`)
+      
 
     // 2. ارسال فقط همین آیتم به سرور
     sendRequest(element)

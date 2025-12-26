@@ -63,6 +63,7 @@
         :data="item"
       />
     </section>
+    <AdminUsersBarChart />
     <Toast />
   </main>
 </template>
@@ -76,7 +77,6 @@ definePageMeta({
   title: 'اطلاعات بیشتر کاربر'
 })
 
-let { showToast } = useToastComp()
 let route = useRoute()
 
 let { data: wallet } = await useFetch('/api/admin/wallet/getWallet', {
@@ -84,6 +84,8 @@ let { data: wallet } = await useFetch('/api/admin/wallet/getWallet', {
   method: 'POST',
   body: { id: route.params.id }
 })
+
+console.log(wallet.value)
 
 let { data: orders } = await useFetch('/api/admin/orders/getUserOrders', {
   credentials: 'include',

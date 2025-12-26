@@ -6,7 +6,10 @@
     </NuxtLayout>
 
     <Transition>
-      <EnterApp v-if="hideEnterAppSec" @enter="hideEnterAppSec = false" />
+      <EnterApp
+        v-if="hideEnterAppSec && route.path == '/auth/login'"
+        @enter="hideEnterAppSec = false"
+      />
     </Transition>
     <ClientOnly>
       <Toaster
@@ -23,6 +26,7 @@
 <script setup>
 import 'vue-sonner/style.css'
 let { settings } = useSettings()
+let route = useRoute()
 
 useHead({
   titleTemplate: `%s ${settings.value?.headerSettings.title || 'توتونچی'}`

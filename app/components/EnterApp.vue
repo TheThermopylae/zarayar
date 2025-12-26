@@ -5,7 +5,7 @@
     >
       <img
         :src="settings?.introPage.imageUrl"
-        class="w-[151px] h-[175px] block m-auto rounded-10"
+        class="block m-auto rounded-10"
       />
       <h1 class="font-bold text-4xl mt-6 mb-3">
         {{ settings?.introPage.title }}
