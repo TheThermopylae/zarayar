@@ -36,6 +36,7 @@
       </svg>
     </button>
     <Drawer
+      :blockScroll="true"
       v-model:visible="visible"
       position="bottom"
       pt:root="!text-graydark !text-sm !h-auto !rounded-t-2xl"
@@ -181,29 +182,29 @@
 </template>
 
 <script setup>
-let visible = ref(false)
+let visible = ref(false);
 
-let types = ref(['لیست آبشده ها', 'لیست قیمت ها', 'لیست نقره ها'])
+let types = ref(["لیست آبشده ها", "لیست قیمت ها", "لیست نقره ها"]);
 let names = ref([
-  'امیر برزگر',
-  'تست تستی',
-  'تست تست پور',
-  'تست تستیان',
-  'تست تست زاده'
-])
+  "امیر برزگر",
+  "تست تستی",
+  "تست تست پور",
+  "تست تستیان",
+  "تست تست زاده",
+]);
 
-let userStatus = ref(['فعال', 'غیر فعال'])
+let userStatus = ref(["فعال", "غیر فعال"]);
 
 let form = reactive({
-  type: '',
-  name: '',
-  number: '',
-  date: '',
-  weight: '',
-  status: ''
-})
+  type: "",
+  name: "",
+  number: "",
+  date: "",
+  weight: "",
+  status: "",
+});
 
-function resetForm () {
-  for (let item in form) form[item] = ''
+function resetForm() {
+  for (let item in form) form[item] = "";
 }
 </script>

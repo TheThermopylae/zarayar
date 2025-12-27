@@ -6,7 +6,7 @@
         <input
           type="checkbox"
           v-model="data.isBuy"
-          class="toggle border-[#BFBFBF] bg-[#BFBFBF] checked:border-[#7AB73E] checked:bg-[#7AB73E] text-white"
+          class="toggle-switch"
         />
       </div>
       <div
@@ -16,7 +16,7 @@
         <input
           type="checkbox"
           v-model="data.isSell"
-          class="toggle border-[#BFBFBF] bg-[#BFBFBF] checked:border-[#7AB73E] checked:bg-[#7AB73E] text-white"
+          class="toggle-switch"
         />
       </div>
       <div>
@@ -109,7 +109,7 @@
         <input
           type="checkbox"
           v-model="data.isAccounting"
-          class="toggle border-[#BFBFBF] bg-[#BFBFBF] checked:border-[#7AB73E] checked:bg-[#7AB73E] text-white"
+          class="toggle-switch"
         />
       </div>
       <div
@@ -119,7 +119,7 @@
         <input
           type="checkbox"
           v-model="data.isMainBranch"
-          class="toggle border-[#BFBFBF] bg-[#BFBFBF] checked:border-[#7AB73E] checked:bg-[#7AB73E] text-white"
+          class="toggle-switch"
         />
       </div>
       <div>

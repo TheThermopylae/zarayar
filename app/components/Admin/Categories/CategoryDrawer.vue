@@ -14,6 +14,7 @@
       @click="visible = true"
     />
     <Drawer
+      :blockScroll="true"
       v-model:visible="visible"
       :header="`گروه بندی ${
         !route.query.type
@@ -56,7 +57,7 @@
 </template>
 
 <script setup>
-let route = useRoute()
+let route = useRoute();
 
-let visible = ref(false)
+let visible = ref(false);
 </script>

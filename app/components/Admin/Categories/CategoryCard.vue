@@ -21,7 +21,7 @@
           class="rounded-10 px-1.5 py-0.5 border"
           :class="{
             'bg-[#96A8254D]': props.data.buyStatus,
-            'bg-[#a825254d]': !props.data.buyStatus
+            'bg-[#a825254d]': !props.data.buyStatus,
           }"
           v-text="props.data.buyStatus ? 'فعال' : 'غیر فعال'"
         ></span>
@@ -32,7 +32,7 @@
           class="rounded-10 px-1.5 py-0.5 border"
           :class="{
             'bg-[#96A8254D]': props.data.sellStatus,
-            'bg-[#a825254d]': !props.data.sellStatus
+            'bg-[#a825254d]': !props.data.sellStatus,
           }"
           v-text="props.data.sellStatus ? 'فعال' : 'غیر فعال'"
         ></span>
@@ -54,6 +54,7 @@
   </div>
 
   <Drawer
+    :blockScroll="true"
     v-model:visible="visible"
     header="حذف دسته بندی"
     position="bottom"
@@ -72,43 +73,43 @@
 </template>
 
 <script setup>
-let props = defineProps(['data'])
-let emit = defineEmits(['success'])
+let props = defineProps(["data"]);
+let emit = defineEmits(["success"]);
 
-let visible = ref(false)
-let loading = ref(false)
+let visible = ref(false);
+let loading = ref(false);
 
-async function updateItemFunc () {
+async function updateItemFunc() {
   try {
-    let data = await $fetch('/api/admin/currency/updateCurrency', {
-      credentials: 'include',
-      method: 'POST',
-      body: { ...props.data }
-    })
+    let data = await $fetch("/api/admin/currency/updateCurrency", {
+      credentials: "include",
+      method: "POST",
+      body: { ...props.data },
+    });
 
-    emit('success', data.message)
+    emit("success", data.message);
   } catch (err) {
-    showToast('error', 'خطا', err.message)
+    showToast("error", "خطا", err.message);
   }
 }
 
-async function deleteCustomer () {
+async function deleteCustomer() {
   try {
-    loading.value = true
+    loading.value = true;
 
-    let data = await $fetch('/api/admin/customers/removeCategory', {
-      credentials: 'include',
-      method: 'POST',
-      body: { id: props.data._id }
-    })
+    let data = await $fetch("/api/admin/customers/removeCategory", {
+      credentials: "include",
+      method: "POST",
+      body: { id: props.data._id },
+    });
 
-    visible.value = false
+    visible.value = false;
 
-    emit('success', 'دسته بندی با موفقیت حذف شد')
+    emit("success", "دسته بندی با موفقیت حذف شد");
   } catch (err) {
-    console.log(err)
+    console.log(err);
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 }
 </script>

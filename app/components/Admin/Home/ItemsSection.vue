@@ -1,30 +1,29 @@
 <template>
   <div class="p-2 rounded-10 border border-strokesec text-xs">
-    <div class="flex justify-between items-center p-2 rounded-10 bg-[#F4F4F4]">
-      <h2>معاملات آبشده</h2>
-      <input
-        type="checkbox"
-        class="toggle border-none bg-[#BFBFBF] checked:bg-[#7AB73E] text-white"
-      />
-    </div>
+    <div
+      class="relative grid grid-cols-2 bg-main rounded-10 p-1 mb-2 z-0 isolate"
+    >
+      <div
+        class="absolute top-1 bottom-1 w-[calc(50%-0.25rem)] bg-white rounded-10 shadow-sm transition-all duration-300 ease-[cubic-bezier(0.25,0.8,0.25,1)]"
+        :class="activeTab === 0 ? 'right-1' : 'right-[50%]'"
+      ></div>
 
-    <div class="grid grid-cols-2 bg-main rounded-10 p-1 my-2">
       <button
-        class="p-1.5 rounded-10 transition"
-        :class="{ 'bg-white': activeTab == 0 }"
+        class="relative z-10 p-1.5 rounded-10 transition-colors duration-300"
+        :class="activeTab === 0 ? 'text-black font-bold' : 'text-gray-500'"
         @click="activeTab = 0"
       >
         مظنه های فعال ({{ activeItemsCount }})
       </button>
+
       <button
-        class="p-1.5 rounded-10 transition"
-        :class="{ 'bg-white': activeTab == 1 }"
+        class="relative z-10 p-1.5 rounded-10 transition-colors duration-300"
+        :class="activeTab === 1 ? 'text-black font-bold' : 'text-gray-500'"
         @click="activeTab = 1"
       >
         مظنه های غیرفعال ({{ inactiveItemsCount }})
       </button>
     </div>
-
     <draggable
       v-model="displayList"
       item-key="_id"
@@ -187,6 +186,7 @@
                 </button>
               </div>
             </div>
+
             <div class="bg-white border border-strokesec rounded-10 p-2">
               <div
                 class="flex justify-between items-center border-b border-strokesec pb-2 mb-2"
@@ -244,123 +244,125 @@
         </div>
       </template>
     </draggable>
+
     <Toaster
       position="bottom-left"
       dir="rtl"
       :toastOptions="{
-        class: 'custom-toast-login'
+        class: 'custom-toast-login',
       }"
     />
   </div>
 </template>
 
 <script setup>
-import { toast } from 'vue-sonner' // ایمپورت مستقیم
-import 'vue-sonner/style.css'
-import draggable from 'vuedraggable'
-import kir from './kir.vue'
+import { ref, computed, watch, markRaw } from "vue"; // markRaw اضافه شد
+import { toast } from "vue-sonner";
+import "vue-sonner/style.css";
+import draggable from "vuedraggable";
+import kir from "./kir.vue";
 
-let props = defineProps(['items'])
-let emit = defineEmits(['error'])
+let props = defineProps(["items"]);
+let emit = defineEmits(["error"]);
 
-let activeTab = ref(0)
-const myItems = ref([])
+let activeTab = ref(0);
+const myItems = ref([]);
 
 // فقط سینک اولیه
 watch(
   () => props.items,
-  newVal => {
-    myItems.value = newVal || []
+  (newVal) => {
+    myItems.value = newVal || [];
   },
   { immediate: true }
-)
+);
 
 const activeItemsCount = computed(
-  () => myItems.value.filter(item => item.isBuy || item.isSell).length
-)
+  () => myItems.value.filter((item) => item.isBuy || item.isSell).length
+);
 const inactiveItemsCount = computed(
-  () => myItems.value.filter(item => !item.isBuy && !item.isSell).length
-)
+  () => myItems.value.filter((item) => !item.isBuy && !item.isSell).length
+);
 
 // لیست نمایشی برای درگ و دراپ
 const displayList = computed({
-  get () {
+  get() {
     // فیلتر کردن بر اساس تب
     if (activeTab.value === 0) {
-      return myItems.value.filter(item => item.isBuy || item.isSell)
+      return myItems.value.filter((item) => item.isBuy || item.isSell);
     } else {
-      return myItems.value.filter(item => !item.isBuy && !item.isSell)
+      return myItems.value.filter((item) => !item.isBuy && !item.isSell);
     }
   },
-  set (reorderedList) {
+  set(reorderedList) {
     // وقتی لیست جدید میاد (دراپ شد)، باید اون رو با آیتم‌های تب دیگه ترکیب کنیم
     // تا دیتای اصلی (myItems) خراب نشه
-    const otherItems = myItems.value.filter(item => {
-      const isActive = item.isBuy || item.isSell
-      return activeTab.value === 0 ? !isActive : isActive
-    })
+    const otherItems = myItems.value.filter((item) => {
+      const isActive = item.isBuy || item.isSell;
+      return activeTab.value === 0 ? !isActive : isActive;
+    });
 
     // ترکیب و آپدیت
-    myItems.value = [...reorderedList, ...otherItems]
-  }
-})
+    myItems.value = [...reorderedList, ...otherItems];
+  },
+});
 
 // *** فانکشن اصلی تغییر ترتیب ***
-const onChange = event => {
+const onChange = (event) => {
   // این ایونت "moved" رو برمی‌گردونه اگه جابجایی انجام شده باشه
   if (event.moved) {
-    const { element, newIndex } = event.moved
+    const { element, newIndex } = event.moved;
 
     // 1. تغییر sortOrder آیتم جابجا شده به ایندکس جدید
     // (به علاوه 1 چون معمولا ایندکس از 0 ولی ترتیب از 1 شروع میشه)
-    element.sortOrder = newIndex
+    element.sortOrder = newIndex;
 
     // 2. ارسال فقط همین آیتم به سرور
-    sendRequest(element)
+    sendRequest(element);
   }
-}
+};
 
-let debounceTimer = null
+let debounceTimer = null;
 
 const changeValue = (item, field, amount) => {
-  if (!item[field]) item[field] = 0
-  const newValue = item[field] + amount
+  if (!item[field]) item[field] = 0;
+  const newValue = item[field] + amount;
   if (newValue >= 0) {
-    item[field] = newValue
-    sendRequest(item)
+    item[field] = newValue;
+    sendRequest(item);
   }
-}
+};
 
-const sendRequest = item => {
-  if (debounceTimer) clearTimeout(debounceTimer)
+const sendRequest = (item) => {
+  if (debounceTimer) clearTimeout(debounceTimer);
 
   debounceTimer = setTimeout(async () => {
     try {
-      let result = await $fetch('/api/admin/currency/updateCurrency', {
-        method: 'POST',
-        body: item // ارسال آبجکت تکی (با sortOrder جدید یا تغییر قیمت)
-      })
+      let result = await $fetch("/api/admin/currency/updateCurrency", {
+        method: "POST",
+        body: item, // ارسال آبجکت تکی
+      });
 
+      // استفاده از markRaw برای رفع وارنینگ
       const toastId = toast.custom(markRaw(kir), {
         componentProps: {
-          // اینجا می‌تونی رویدادهای کامپوننت رو هندل کنی
           onConfirm: () => {
-            console.log('Confirmed!')
-            toast.dismiss(toastId) // بستن توست
+            console.log("Confirmed!");
+            toast.dismiss(toastId);
           },
           onClose: () => {
-            toast.dismiss(toastId) // بستن توست
-          }
+            toast.dismiss(toastId);
+          },
         },
-        duration: 10000 // زمان طولانی‌تر
-      })
+        duration: 10000,
+      });
 
-      console.log(result)
+      console.log(result);
     } catch (error) {
-      toast.error('error', error.data.data.message)
+      toast.error("error", error.data?.data?.message || "Error");
     }
-  }, 500)
-}
+  }, 500);
+};
 </script>
 
 <style>

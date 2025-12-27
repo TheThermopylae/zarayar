@@ -38,7 +38,7 @@ let hideEnterAppSec = ref(settings.value?.introPage.isActive)
 }
 
 .page-leave-to {
-  transform: translateX(-100%);
+  transform: translateX(100%);
   opacity: 0;
 }
 

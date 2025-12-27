@@ -2,34 +2,42 @@
   <div>
     <HomeWarnSection />
     <HomeItemsSection @refreshOrders="refresh" />
-    <HomeRecentOrders :data="todayOrders" :pending="pending" />
+
+    <HomeRecentOrders :data="todayOrders" :pending="pending || !today" />
   </div>
 </template>
 
 <script setup>
+import { ref, computed, onMounted } from "vue";
+
 useHead({
-  title: 'صفحه اصلی |'
-})
+  title: "صفحه اصلی |",
+});
 
 definePageMeta({
-  title: 'زرعیار آبشده'
-})
+  title: "زرعیار آبشده",
+});
 
-let { data, refresh, pending } = await useFetch('/api/user/orders/getOrders', {
-  credentials: 'include'
-})
+let { data, refresh, pending } = useLazyFetch("/api/user/orders/getOrders", {
+  credentials: "include",
+});
 
-const now = new Date()
+// 1. مقدار اولیه را null می‌گذاریم تا سرور هیچ تاریخی محاسبه نکند
+const today = ref(null);
 
-const year = now.getFullYear()
-const month = now.getMonth() + 1
-const day = now.getDate()
+onMounted(() => {
+  // 2. تاریخ فقط و فقط در مرورگر کاربر محاسبه می‌شود
+  today.value = new Intl.DateTimeFormat("en-CA", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
+});
 
-let todayOrders = computed(() => {
-  return data.value
-    ? data.value.filter(
-        order => order.createdAt.split('T')[0] == `${year}-${month}-${day}`
-      )
-    : []
-})
-</script>
+const todayOrders = computed(() => {
+  // اگر هنوز تاریخ محاسبه نشده یا دیتا نیامده، خالی برگردان
+  if (!data.value || !today.value) return [];
+
+  return data.value.filter((item) => item.createdAt.startsWith(today.value));
+});
+</script> 

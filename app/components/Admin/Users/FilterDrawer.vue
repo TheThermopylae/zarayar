@@ -37,6 +37,7 @@
       </svg>
     </Button>
     <Drawer
+      :blockScroll="true"
       v-model:visible="visible"
       position="bottom"
       pt:root="!text-graydark !text-sm !h-auto !rounded-t-2xl"
@@ -155,23 +156,23 @@
 </template>
 
 <script setup>
-let props = defineProps(['data', 'pending'])
-let emit = defineEmits(['refreshFilter'])
-let visible = ref(false)
+let props = defineProps(["data", "pending"]);
+let emit = defineEmits(["refreshFilter"]);
+let visible = ref(false);
 
-let categories = ref(['بنکدار ', 'ویژه'])
+let categories = ref(["بنکدار ", "ویژه"]);
 
 let userStatus = ref([
-  { fa: 'فعال', en: 'active' },
-  { fa: 'غیر فعال', en: 'disabled' }
-])
+  { fa: "فعال", en: "active" },
+  { fa: "غیر فعال", en: "disabled" },
+]);
 
-function resetForm () {
-  for (let item in props.data) props.data[item] = ''
+function resetForm() {
+  for (let item in props.data) props.data[item] = "";
 }
 
-function filterFunc () {
-  emit('refreshFilter')
-  visible.value = false
+function filterFunc() {
+  emit("refreshFilter");
+  visible.value = false;
 }
 </script>

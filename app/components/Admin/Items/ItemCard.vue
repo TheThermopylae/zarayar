@@ -55,8 +55,11 @@
       </li>
     </ul>
     <div class="grid grid-cols-2 gap-2">
-      <Button label="ویرایش" pt:root="!bg-white !border !text-primary" @click="
-      router.push(`/admin/items/${props.data._id}`)" />
+      <Button
+        label="ویرایش"
+        pt:root="!bg-white !border !text-primary"
+        @click="router.push(`/admin/items/${props.data._id}`)"
+      />
       <Button
         label="حذف"
         @click="visible = true"
@@ -66,6 +69,7 @@
   </div>
 
   <Drawer
+    :blockScroll="true"
     v-model:visible="visible"
     header="حذف آیتم"
     position="bottom"
@@ -84,44 +88,44 @@
 </template>
 
 <script setup>
-let router = useRouter()
+let router = useRouter();
 
-let { showToast } = useToastComp()
-let props = defineProps(['data'])
-let emit = defineEmits(['success'])
+let { showToast } = useToastComp();
+let props = defineProps(["data"]);
+let emit = defineEmits(["success"]);
 
-let visible = ref(false)
-let loading = ref(false)
+let visible = ref(false);
+let loading = ref(false);
 
-async function updateItemFunc () {
+async function updateItemFunc() {
   try {
-    let data = await $fetch('/api/admin/currency/updateCurrency', {
-      credentials: 'include',
-      method: 'POST',
-      body: { ...props.data }
-    })
+    let data = await $fetch("/api/admin/currency/updateCurrency", {
+      credentials: "include",
+      method: "POST",
+      body: { ...props.data },
+    });
 
-    emit('success', data.message)
+    emit("success", data.message);
   } catch (err) {
-    showToast('error', 'خطا', err.message)
+    showToast("error", "خطا", err.message);
   }
 }
 
-async function removeItemFunc () {
+async function removeItemFunc() {
   try {
-    loading.value = true
+    loading.value = true;
 
-    let data = await $fetch('/api/admin/currency/removeCurrency', {
-      credentials: 'include',
-      method: 'POST',
-      body: { id: props.data._id }
-    })
+    let data = await $fetch("/api/admin/currency/removeCurrency", {
+      credentials: "include",
+      method: "POST",
+      body: { id: props.data._id },
+    });
 
-    emit('success', data.message)
+    emit("success", data.message);
   } catch (err) {
-    showToast('error', 'خطا', err.message)
+    showToast("error", "خطا", err.message);
   } finally {
-    loading.value = true
+    loading.value = true;
   }
 }
 </script>

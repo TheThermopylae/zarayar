@@ -7,6 +7,7 @@
     />
 
     <Drawer
+      :blockScroll="true"
       v-model:visible="visible"
       :header="`${
         editingId ? 'ویرایش' : 'مدیریت'
@@ -167,123 +168,125 @@
 </template>
 
 <script setup>
-import { reactive, ref } from 'vue'
+import { reactive, ref } from "vue";
 
-const route = useRoute()
+const route = useRoute();
 
 // ورودی‌ها
-const props = defineProps(['data', 'categories'])
-const emit = defineEmits(['success', 'error', 'refresh', 'warn'])
+const props = defineProps(["data", "categories"]);
+const emit = defineEmits(["success", "error", "refresh", "warn"]);
 
 // استیت‌ها
-const visible = ref(false)
-const visibleDialog = ref(false)
-const loading = ref(false)
-const deleteLoading = ref(false) // لودینگ مخصوص حذف
-const editingId = ref(null)
-const deletingId = ref(null) // آیدی آیتمی که قراره حذف بشه
+const visible = ref(false);
+const visibleDialog = ref(false);
+const loading = ref(false);
+const deleteLoading = ref(false); // لودینگ مخصوص حذف
+const editingId = ref(null);
+const deletingId = ref(null); // آیدی آیتمی که قراره حذف بشه
 
 const form = reactive({
-  title: '',
+  title: "",
   items: [],
-  sortOrder: ''
-})
+  sortOrder: "",
+});
 
 // باز کردن دراور
 const openDrawer = () => {
-  visible.value = true
-}
+  visible.value = true;
+};
 
 const getPageTypeLabel = () => {
-  const type = route.query.type
-  const labels = { coins: 'سکه', silvers: 'نقره' }
-  return labels[type] || 'مظنه'
-}
+  const type = route.query.type;
+  const labels = { coins: "سکه", silvers: "نقره" };
+  return labels[type] || "مظنه";
+};
 
 // --- توابع ---
 
-function startEdit (item) {
-  editingId.value = item._id
-  form.title = item.title
-  form.sortOrder = item.sortOrder
+function startEdit(item) {
+  editingId.value = item._id;
+  form.title = item.title;
+  form.sortOrder = item.sortOrder;
   if (item.items && Array.isArray(item.items)) {
-    form.items = item.items.map(i => (i && typeof i === 'object' ? i._id : i))
+    form.items = item.items.map((i) =>
+      i && typeof i === "object" ? i._id : i
+    );
   } else {
-    form.items = []
+    form.items = [];
   }
-  const content = document.querySelector('.p-drawer-content')
-  if (content) content.scrollTop = 0
+  const content = document.querySelector(".p-drawer-content");
+  if (content) content.scrollTop = 0;
 }
 
-function resetForm () {
-  editingId.value = null
-  form.title = ''
-  form.items = []
-  form.sortOrder = ''
+function resetForm() {
+  editingId.value = null;
+  form.title = "";
+  form.items = [];
+  form.sortOrder = "";
 }
 
-async function submitForm () {
+async function submitForm() {
   if (!form.title || !form.items.length || !form.sortOrder) {
-    emit('warn', 'لطفا تمام فیلدها را پر کنید.')
-    return
+    emit("warn", "لطفا تمام فیلدها را پر کنید.");
+    return;
   }
-  loading.value = true
+  loading.value = true;
   try {
     const url = editingId.value
       ? `/api/admin/itemsCategory/update/${editingId.value}`
-      : '/api/admin/itemsCategory/create'
-    const method = editingId.value ? 'PUT' : 'POST'
+      : "/api/admin/itemsCategory/create";
+    const method = editingId.value ? "PUT" : "POST";
 
     await $fetch(url, {
-      credentials: 'include',
+      credentials: "include",
       method: method,
-      body: form
-    })
+      body: form,
+    });
 
     emit(
-      'success',
-      (method == 'PUT' ? 'دسته با موفقیت ویرایش شد' : 'دسته با موفقیت اضافه شد')
-    )
-    resetForm()
+      "success",
+      method == "PUT" ? "دسته با موفقیت ویرایش شد" : "دسته با موفقیت اضافه شد"
+    );
+    resetForm();
   } catch (err) {
-    console.log(err)
-    emit('error', err.data?.message || 'خطایی رخ داد')
+    console.log(err);
+    emit("error", err.data?.message || "خطایی رخ داد");
   } finally {
-    loading.value = false
+    loading.value = false;
   }
 }
 
 // --- بخش جدید: مدیریت حذف با دیالوگ ---
 
 // ۱. کلیک روی دکمه حذف در لیست -> باز کردن دیالوگ
-function confirmDelete (id) {
-  deletingId.value = id // آیدی رو نگه میداریم
-  visibleDialog.value = true // دیالوگ رو باز میکنیم
+function confirmDelete(id) {
+  deletingId.value = id; // آیدی رو نگه میداریم
+  visibleDialog.value = true; // دیالوگ رو باز میکنیم
 }
 
 // ۲. کلیک روی دکمه "بله" در دیالوگ -> انجام عملیات حذف
-async function deleteCategory () {
-  if (!deletingId.value) return
+async function deleteCategory() {
+  if (!deletingId.value) return;
 
-  deleteLoading.value = true // لودینگ دکمه حذف
+  deleteLoading.value = true; // لودینگ دکمه حذف
 
   try {
     await $fetch(`/api/admin/itemsCategory/delete/${deletingId.value}`, {
-      credentials: 'include',
-      method: 'DELETE'
-    })
+      credentials: "include",
+      method: "DELETE",
+    });
 
     // اگر آیتمی که حذف شده توی فرم باز بود، فرم رو ببند
-    if (editingId.value === deletingId.value) resetForm()
+    if (editingId.value === deletingId.value) resetForm();
 
-    emit('success', 'دسته با موفقیت حذف شد')
-    visibleDialog.value = false // بستن دیالوگ بعد از موفقیت
+    emit("success", "دسته با موفقیت حذف شد");
+    visibleDialog.value = false; // بستن دیالوگ بعد از موفقیت
   } catch (err) {
-    console.error(err)
-    emit('error', 'خطا در حذف آیتم')
+    console.error(err);
+    emit("error", "خطا در حذف آیتم");
   } finally {
-    deleteLoading.value = false
-    deletingId.value = null
+    deleteLoading.value = false;
+    deletingId.value = null;
   }
 }
 </script>

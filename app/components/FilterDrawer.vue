@@ -18,6 +18,7 @@
     فیلتر
   </button>
   <Drawer
+    :blockScroll="true"
     v-model:visible="visible"
     header="فیلتر"
     position="bottom"
@@ -91,5 +92,5 @@
 </template>
 
 <script setup>
-let visible = ref(false)
+let visible = ref(false);
 </script>

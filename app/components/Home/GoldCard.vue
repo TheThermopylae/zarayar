@@ -2,14 +2,14 @@
   <div>
     <div class="grid grid-cols-3 items-center text-xs">
       <div
-        @click=";(visible = true), (side = 'buy'), (value = '')"
+        @click="(visible = true), (side = 'buy'), (value = '');"
         class="text-center bg-white border border-stroke py-2 px-3 rounded-10 font-bold text-[16px] cursor-pointer text-[#96A825]"
       >
         <NumberFlow :value="props.data.amount" />
       </div>
       <h4 class="text-center text-graydark">{{ props.data.name }}</h4>
       <div
-        @click=";(visible = true), (side = 'sell'), (value = '')"
+        @click="(visible = true), (side = 'sell'), (value = '');"
         class="text-center bg-white border border-stroke py-2 px-3 rounded-10 font-bold text-[16px] cursor-pointer text-red-400"
       >
         <NumberFlow :value="props.data.amount" />
@@ -18,6 +18,7 @@
 
     <div>
       <Drawer
+        :blockScroll="true"
         v-model:visible="visible"
         position="bottom"
         style="height: 80vh"
@@ -48,7 +49,7 @@
           >
             <div class="text-center">
               <span class="font-bold text-3xl">{{ displayValue }}</span>
-              <span class="mr-1">{{ gramInp ? 'گرم' : 'تومان' }}</span>
+              <span class="mr-1">{{ gramInp ? "گرم" : "تومان" }}</span>
             </div>
 
             <div
@@ -176,6 +177,7 @@
       </Drawer>
 
       <Drawer
+        :blockScroll="true"
         v-model:visible="visibleSubmit"
         header="تایید معامله"
         position="bottom"
@@ -232,6 +234,7 @@
       </Drawer>
 
       <Drawer
+        :blockScroll="true"
         v-model:visible="visibleSuccessMessage"
         position="bottom"
         style="height: auto"
@@ -292,11 +295,12 @@
         <Button
           label="متوجه شدم"
           pt:root="!mt-2 w-full !bg-secondary"
-          @click=";(visibleSuccessMessage = false), (value = '')"
+          @click="(visibleSuccessMessage = false), (value = '');"
         />
       </Drawer>
 
       <Drawer
+        :blockScroll="true"
         v-model:visible="visibleErrorMessage"
         position="bottom"
         style="height: auto"
@@ -335,7 +339,7 @@
         <Button
           label="متوجه شدم"
           pt:root="!mt-2 w-full !bg-secondary"
-          @click=";(visibleErrorMessage = false), (value = '')"
+          @click="(visibleErrorMessage = false), (value = '');"
         />
       </Drawer>
     </div>
@@ -343,158 +347,158 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
-import NumberFlow from '@number-flow/vue'
+import { ref, computed } from "vue";
+import NumberFlow from "@number-flow/vue";
 
-let visible = ref(false)
-let visibleSubmit = ref(false)
-let visibleSuccessMessage = ref(false)
-let visibleErrorMessage = ref(false)
-let errorMessage = ref(null)
+let visible = ref(false);
+let visibleSubmit = ref(false);
+let visibleSuccessMessage = ref(false);
+let visibleErrorMessage = ref(false);
+let errorMessage = ref(null);
 
 // true = ورودی گرم است
 // false = ورودی مبلغ (تومان) است
-let gramInp = ref(true)
+let gramInp = ref(true);
 
-let props = defineProps(['data', 'pending'])
-let emit = defineEmits(['toast', 'success'])
+let props = defineProps(["data", "pending"]);
+let emit = defineEmits(["toast", "success"]);
 
-const value = ref('')
-let side = ref('')
+const value = ref("");
+let side = ref("");
 
-const keys = [1, 2, 3, 4, 5, 6, 7, 8, 9, '.', 0]
-let loading = ref(false)
+const keys = [1, 2, 3, 4, 5, 6, 7, 8, 9, ".", 0];
+let loading = ref(false);
 
 // مقدار نمایشی (عدد وارد شده با فرمت)
 const displayValue = computed(() => {
-  if (!value.value) return '0'
-  return Number(value.value).toLocaleString()
-})
+  if (!value.value) return "0";
+  return Number(value.value).toLocaleString();
+});
 
 // محاسبه قیمت نهایی هر گرم (با کارمزد)
 const unitPrice = computed(() => {
-  const basePrice = props.data.amount || 0
+  const basePrice = props.data.amount || 0;
 
   // انتخاب درصد سود/زیان
-  let profitPercent = 0
-  if (side.value === 'buy') {
+  let profitPercent = 0;
+  if (side.value === "buy") {
     profitPercent =
-      (props.data.profitBuy || 0) + (props.data.profitBuyAdjustment || 0)
+      (props.data.profitBuy || 0) + (props.data.profitBuyAdjustment || 0);
   } else {
     // فرض بر اینکه در آبجکت دیتای شما profitSell هم هست
     // اگر فقط profitBuy استفاده می‌شود، این شرط را بردارید
     profitPercent =
-      (props.data.profitSell || 0) + (props.data.profitSellAdjustment || 0)
+      (props.data.profitSell || 0) + (props.data.profitSellAdjustment || 0);
   }
 
-  return basePrice * (1 + profitPercent / 100)
-})
+  return basePrice * (1 + profitPercent / 100);
+});
 
 // محاسبه وزن نهایی (چیزی که به سرور ارسال می‌شود و در محاسبات استفاده می‌شود)
 const finalWeight = computed(() => {
-  const val = Number(value.value) || 0
+  const val = Number(value.value) || 0;
 
   if (gramInp.value) {
     // اگر ورودی گرم است، خود عدد وزن است
-    return val
+    return val;
   } else {
     // اگر ورودی تومان است: وزن = مبلغ / قیمت واحد
-    const price = val
-    return unitPrice.value > 0 ? price / unitPrice.value : 0
+    const price = val;
+    return unitPrice.value > 0 ? price / unitPrice.value : 0;
   }
-})
+});
 
 // محاسبه قیمت نهایی کل (تومان)
 const finalPrice = computed(() => {
   if (!gramInp.value) {
     // اگر ورودی تومان است، خود عدد قیمت است
-    return Number(value.value) || 0
+    return Number(value.value) || 0;
   } else {
     // اگر ورودی گرم است: قیمت = وزن * قیمت واحد
-    return finalWeight.value * unitPrice.value
+    return finalWeight.value * unitPrice.value;
   }
-})
+});
 
 // تغییر حالت (گرم / تومان)
-function toggleMode () {
-  gramInp.value = !gramInp.value
-  value.value = '' // ریست کردن مقدار موقع تغییر حالت
+function toggleMode() {
+  gramInp.value = !gramInp.value;
+  value.value = ""; // ریست کردن مقدار موقع تغییر حالت
 }
 
-function handleInput (input) {
+function handleInput(input) {
   // قوانین نقطه
-  if (input === '.') {
-    if (value.value === '') return
-    if (value.value.includes('.')) return
+  if (input === ".") {
+    if (value.value === "") return;
+    if (value.value.includes(".")) return;
   }
   // قوانین صفر
-  if (input === 0 && value.value === '0') return
-  if (value.value === '0' && input !== '.' && input !== 0) {
-    value.value = ''
+  if (input === 0 && value.value === "0") return;
+  if (value.value === "0" && input !== "." && input !== 0) {
+    value.value = "";
   }
 
-  value.value += input
+  value.value += input;
 }
 
-function handleDelete () {
-  value.value = value.value.slice(0, -1)
+function handleDelete() {
+  value.value = value.value.slice(0, -1);
 }
 
-function editOrder () {
-  visibleSubmit.value = false
-  visible.value = true
+function editOrder() {
+  visibleSubmit.value = false;
+  visible.value = true;
 }
 
-function showSubmit () {
+function showSubmit() {
   // چک کردن اعتبار بر اساس وزن نهایی
-  const w = finalWeight.value
+  const w = finalWeight.value;
 
   if (w <= 0) {
-    return // یا نمایش خطا
+    return; // یا نمایش خطا
   }
 
   if (w < props.data.minOrderQty || w > props.data.maxOrderQty) {
-    emit('toast', {
-      type: 'warn',
-      title: 'اخطار',
-      text: `وزن معامله باید بین ${props.data.minOrderQty} و ${props.data.maxOrderQty} گرم باشد`
-    })
+    emit("toast", {
+      type: "warn",
+      title: "اخطار",
+      text: `وزن معامله باید بین ${props.data.minOrderQty} و ${props.data.maxOrderQty} گرم باشد`,
+    });
   } else {
-    visible.value = false
-    visibleSubmit.value = true
+    visible.value = false;
+    visibleSubmit.value = true;
   }
 }
 
-async function submit () {
+async function submit() {
   try {
-    loading.value = true
+    loading.value = true;
 
-    let data = await $fetch('/api/user/orders/submit', {
-      credentials: 'include',
-      method: 'POST',
+    let data = await $fetch("/api/user/orders/submit", {
+      credentials: "include",
+      method: "POST",
       body: {
         side: side.value,
-        settlementType: 'cash',
+        settlementType: "cash",
         weightGram: finalWeight.value, // همیشه وزن محاسبه شده را ارسال می‌کنیم
-        currencyId: props.data._id
-      }
-    })
+        currencyId: props.data._id,
+      },
+    });
 
-    emit('toast', {
-      type: 'success',
-      title: 'موفقیت آمیز',
-      text: 'سفارش با موفقیت ثبت شد'
-    })
-    emit('success')
-    console.log(data)
-    visibleSuccessMessage.value = true
+    emit("toast", {
+      type: "success",
+      title: "موفقیت آمیز",
+      text: "سفارش با موفقیت ثبت شد",
+    });
+    emit("success");
+    console.log(data);
+    visibleSuccessMessage.value = true;
   } catch (err) {
-    console.log(err.data.data.message)
-    errorMessage.value = err.data.data.message
-    visibleErrorMessage.value = true
+    console.log(err.data.data.message);
+    errorMessage.value = err.data.data.message;
+    visibleErrorMessage.value = true;
   } finally {
-    visibleSubmit.value = false
-    loading.value = false
+    visibleSubmit.value = false;
+    loading.value = false;
   }
 }
 </script>

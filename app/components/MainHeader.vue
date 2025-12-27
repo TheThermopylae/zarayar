@@ -100,6 +100,7 @@
       </NuxtLink>
     </div>
     <Drawer
+      :blockScroll="true"
       v-model:visible="visible"
       pt:root="!rounded-none !bg-[#F2F3F6]"
       pt:content="!relative"
@@ -135,7 +136,7 @@
             />
           </svg>
         </div>
-        {{ userData.fname || 'بدون' }} {{ userData?.lname || 'نام' }}
+        {{ userData.fname || "بدون" }} {{ userData?.lname || "نام" }}
       </section>
       <ul class="mt-4 space-y-[1px]">
         <li v-if="userData.role == 'ADMIN'">
@@ -369,7 +370,7 @@
         </li>
         <li>
           <button
-            @click=";(visible = false), (visibleRoles = true)"
+            @click="(visible = false), (visibleRoles = true)"
             class="p-3 bg-white flex justify-between items-center w-full"
           >
             <div class="flex items-center gap-2">
@@ -412,7 +413,7 @@
         </li>
         <li>
           <button
-            @click=";(visible = false), (visibleAbout = true)"
+            @click="(visible = false), (visibleAbout = true)"
             class="p-3 bg-white flex justify-between items-center w-full rounded-b-2xl"
           >
             <div class="flex items-center gap-2">
@@ -447,6 +448,7 @@
     </Drawer>
 
     <Drawer
+      :blockScroll="true"
       v-model:visible="visibleRoles"
       header="قوانین و مقررات"
       position="bottom"
@@ -493,6 +495,7 @@
       </p>
     </Drawer>
     <Drawer
+      :blockScroll="true"
       v-model:visible="visibleAbout"
       header="درباره ما"
       position="bottom"
@@ -539,6 +542,7 @@
       </p>
     </Drawer>
     <Drawer
+      :blockScroll="true"
       position="bottom"
       v-model:visible="dialogVisible"
       modal
@@ -567,31 +571,31 @@
 </template>
 
 <script setup>
-let { settings } = useSettings()
-let { userData } = userAuth()
+let { settings } = useSettings();
+let { userData } = userAuth();
 
-let route = useRoute()
+let route = useRoute();
 
-let visible = ref(false)
+let visible = ref(false);
 
-let visibleRoles = ref(false)
-let visibleAbout = ref(false)
+let visibleRoles = ref(false);
+let visibleAbout = ref(false);
 
-let dialogVisible = ref(false)
+let dialogVisible = ref(false);
 
-function backBtn () {
-  return navigateTo('/')
+function backBtn() {
+  return navigateTo("/");
 }
 
-function showDialog () {
-  visible.value = false
-  dialogVisible.value = true
+function showDialog() {
+  visible.value = false;
+  dialogVisible.value = true;
 }
 
-async function logout () {
-  let data = await $fetch('/api/logout')
-  visible.value = false
-  dialogVisible.value = false
-  return navigateTo('/auth/login')
+async function logout() {
+  let data = await $fetch("/api/logout");
+  visible.value = false;
+  dialogVisible.value = false;
+  return navigateTo("/auth/login");
 }
 </script>

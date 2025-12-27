@@ -36,6 +36,7 @@
       </svg>
     </button>
     <Drawer
+      :blockScroll="true"
       v-model:visible="visible"
       position="bottom"
       pt:root="!text-graydark !text-sm !h-auto !rounded-t-2xl"
@@ -157,22 +158,22 @@
 </template>
 
 <script setup>
-let visible = ref(false)
+let visible = ref(false);
 
-let nazds = ref(['test', 'test 2', 'test 3'])
+let nazds = ref(["test", "test 2", "test 3"]);
 
-let userStatus = ref(['فعال', 'غیر فعال'])
+let userStatus = ref(["فعال", "غیر فعال"]);
 
 let form = reactive({
-  submit: '',
-  receiver: '',
-  nazd: '',
-  time: '',
-  number: '',
-  status: ''
-})
+  submit: "",
+  receiver: "",
+  nazd: "",
+  time: "",
+  number: "",
+  status: "",
+});
 
-function resetForm () {
-  for (let item in form) form[item] = ''
+function resetForm() {
+  for (let item in form) form[item] = "";
 }
 </script>

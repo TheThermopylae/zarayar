@@ -43,7 +43,12 @@ export default defineNuxtConfig({
     },
     pageTransition: { name: 'page', mode: 'out-in' },
   },
-
+  routeRules: {
+    // هر درخواستی که به /api-proxy/ شروع بشه رو بفرست به سرور اصلی
+    '/api-proxy/**': {
+      proxy: 'https://api.tutunchi.ir/**'
+    }
+  },
   modules: [
     '@primevue/nuxt-module',
     '@vite-pwa/nuxt',
