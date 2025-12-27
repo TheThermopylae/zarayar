@@ -2,7 +2,7 @@
   <main class="flex items-center justify-center flex-col gap-4 h-screen">
     <h1 class="font-bold text-2xl">زرعیار</h1>
     <form
-      class="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg w-full max-w-md"
+      class="bg-white/80 border border-stroke rounded-2xl p-6 w-full max-w-md"
     >
       <div class="flex items-center gap-3 mb-4">
         <div
@@ -31,21 +31,24 @@
       <div class="space-y-3">
         <div>
           <label class="text-xs text-slate-600 mb-1 block">شماره تلفن</label>
+          
           <input
             type="text"
             inputmode="numeric"
             placeholder="مثال: 0912xxxxxxx"
             v-model="phone"
-            class="w-full rounded-xl border border-slate-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-amber-300"
+            @input="phone = $event.target.value.replace(/[^0-9]/g, '')"
+            class="w-full rounded-xl border border-[#e4e4e4] px-4 py-3 focus:outline-none"
             maxlength="11"
           />
+          
         </div>
 
         <div class="pt-2">
           <Button
             pt:root="!w-full"
             label="ارسال کد"
-            :disabled="!phone && phone.length < 11"
+            :disabled="!phone || phone.length < 11"
             :loading="loading"
             @click="loginFunc"
           />
@@ -66,14 +69,12 @@ let config = useRuntimeConfig()
 let emit = defineEmits(['otpEmit'])
 
 let phone = ref('')
-
 let loading = ref(false)
 
 async function loginFunc () {
   try {
     loading.value = true
 
-       
     let data = await $fetch(`${config.public.API_BASE_URL}/auth`, {
       method: 'POST',
       body: { phone: phone.value }
@@ -83,7 +84,7 @@ async function loginFunc () {
     emit('otpEmit', phone.value)
   } catch (err) {
     console.log(err)
-    showToast('error', 'خطا', err.msg)
+    showToast('error', 'خطا', err?.data?.msg || err?.msg || 'خطایی رخ داد')
   } finally {
     loading.value = false
   }

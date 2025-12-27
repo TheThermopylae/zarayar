@@ -40,19 +40,22 @@
             stroke-linejoin="round"
           />
         </svg>
-        به روزرسانی قیمت: {{ date }}
+        <span>به روزرسانی قیمت: {{ date }}</span>
       </div>
-      
+
       <div class="h-[1px] flex-grow bg-stroke"></div>
-      
-      <div class="bg-green-500/20 flex items-center gap-2 rounded-10 px-2 py-1.5 text-green-500 overflow-visible">
+
+      <div
+        class="bg-green-500/20 flex items-center gap-2 rounded-10 px-2 py-1.5 text-green-500 overflow-visible"
+      >
         <div class="relative flex items-center justify-center size-[6px]">
-           <span class="custom-halo absolute bg-green-500 rounded-full"></span>
-           <span class="relative size-[6px] bg-green-500 rounded-full z-10"></span>
+          <span class="custom-halo absolute bg-green-500 rounded-full"></span>
+          <span
+            class="relative size-[6px] bg-green-500 rounded-full z-10"
+          ></span>
         </div>
         <span class="relative z-10 text-xs">زنده</span>
       </div>
-
     </div>
 
     <div
@@ -108,28 +111,47 @@
     <div
       class="border border-[#0000001A] rounded-10 p-2 bg-[#FAFAFA] space-y-2.5"
     >
-      <HomeGoldCard
-        v-for="item in data"
-        :data="item"
-        :key="item._id"
-        @toast="showToastFunc"
-        @success="$emit('refreshOrders')"
-      />
+      <template v-if="status === 'pending' || status === 'idle' || !data">
+        <Skeleton
+          v-for="n in 6"
+          :key="n"
+          width="100%"
+          height="2.5rem"
+          pt:root="!rounded-10"
+        />
+      </template>
+
+      <template v-else>
+        <HomeGoldCard
+          v-for="item in data"
+          :data="item"
+          :key="item._id"
+          @toast="showToastFunc"
+          @success="$emit('refreshOrders')"
+        />
+
+        <div
+          v-if="data && data.length === 0"
+          class="text-center text-gray-400 py-4 text-sm"
+        >
+          موردی برای نمایش وجود ندارد
+        </div>
+      </template>
     </div>
+
     <Toast />
   </div>
 </template>
 
 <script setup>
-import io from 'socket.io-client';
+import { ref, onMounted } from 'vue'
+import io from 'socket.io-client'
 
 let { showToast } = useToastComp()
 let config = useRuntimeConfig()
 
-// 1. تعریف متغیر ری‌اکتیو برای ساعت
-let date = ref('در حال دریافت...')
+let date = ref('...')
 
-// 2. تابع برای گرفتن ساعت و دقیقه جاری
 const updateTime = () => {
   const now = new Date()
   const hours = String(now.getHours()).padStart(2, '0')
@@ -137,23 +159,26 @@ const updateTime = () => {
   date.value = `${hours}:${minutes}`
 }
 
-let { data, pending } = useLazyFetch('/api/admin/currency/getCurrency', {
-  credentials: 'include'
+let { data, status } = useLazyFetch('/api/admin/currency/getCurrency', {
+  credentials: 'include',
+  server: false
 })
 
-// 3. اولین بار که صفحه لود میشه ساعت رو بگیر
-updateTime()
+onMounted(() => {
+  updateTime() // حالا ساعت را آپدیت کن
 
-const socket = io(config.public.API_BASE_URL, {
-  transports: ["polling"], 
-  withCredentials: true,
-  path: "/socket.io/" 
-});
+  const socket = io(config.public.API_BASE_URL, {
+    transports: ['polling'],
+    withCredentials: true,
+    path: '/socket.io/'
+  })
 
-socket.on('price:update', items => {
-  data.value = items
-  // 4. هر بار که دیتای جدید از سوکت اومد، ساعت رو هم آپدیت کن
-  updateTime()
+  socket.on('price:update', items => {
+    if (items) {
+      data.value = items
+      updateTime()
+    }
+  })
 })
 
 function showToastFunc (toast) {
@@ -174,7 +199,8 @@ function showToastFunc (toast) {
     transform: scale(1);
     opacity: 0.7;
   }
-  70%, 100% {
+  70%,
+  100% {
     transform: scale(3.5);
     opacity: 0;
   }

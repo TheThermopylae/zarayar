@@ -2,20 +2,12 @@
   <main class="flex items-center justify-center flex-col gap-4 h-screen">
     <h1 class="font-bold text-2xl">زرعیار</h1>
     <form
-      class="bg-white/80 backdrop-blur-md rounded-2xl p-6 shadow-lg w-full max-w-md"
+      class="bg-white/80 rounded-2xl p-6 border border-stroke w-full max-w-md"
     >
-      <p class="text-center mb-4">کد پیامک شده را وارد کنید</p>
+      <p class="mb-2">کد پیامک شده را وارد کنید</p>
 
       <div class="space-y-3">
-        <div>
-          <label class="text-xs text-slate-600 mb-1 block">کد</label>
-          <input
-            type="text"
-            placeholder="XXXXX"
-            v-model="otp"
-            class="w-full rounded-xl border border-slate-200 px-4 py-3 focus:outline-none focus:ring-2 focus:ring-amber-300"
-          />
-        </div>
+        <InputOtp v-model="otp" :length="5" dir="ltr" :integerOnly="true" />
 
         <div class="pt-2">
           <Button
@@ -63,3 +55,11 @@ async function otpFunc () {
   }
 }
 </script>
+
+<style>
+.p-inputotp-input {
+  background: white !important;
+  flex-grow: 1 !important;
+  border-color: #e4e4e4 !important;
+}
+</style>

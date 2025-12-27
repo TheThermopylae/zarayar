@@ -244,12 +244,21 @@
         </div>
       </template>
     </draggable>
+    <Toaster
+      position="bottom-left"
+      dir="rtl"
+      :toastOptions="{
+        class: 'custom-toast-login'
+      }"
+    />
   </div>
 </template>
 
 <script setup>
 import { toast } from 'vue-sonner' // ایمپورت مستقیم
+import 'vue-sonner/style.css'
 import draggable from 'vuedraggable'
+import kir from './kir.vue'
 
 let props = defineProps(['items'])
 let emit = defineEmits(['error'])
@@ -305,7 +314,6 @@ const onChange = event => {
     // 1. تغییر sortOrder آیتم جابجا شده به ایندکس جدید
     // (به علاوه 1 چون معمولا ایندکس از 0 ولی ترتیب از 1 شروع میشه)
     element.sortOrder = newIndex
-      
 
     // 2. ارسال فقط همین آیتم به سرور
     sendRequest(element)
@@ -333,7 +341,20 @@ const sendRequest = item => {
         body: item // ارسال آبجکت تکی (با sortOrder جدید یا تغییر قیمت)
       })
 
-      toast.success(result.message)
+      const toastId = toast.custom(markRaw(kir), {
+        componentProps: {
+          // اینجا می‌تونی رویدادهای کامپوننت رو هندل کنی
+          onConfirm: () => {
+            console.log('Confirmed!')
+            toast.dismiss(toastId) // بستن توست
+          },
+          onClose: () => {
+            toast.dismiss(toastId) // بستن توست
+          }
+        },
+        duration: 10000 // زمان طولانی‌تر
+      })
+
       console.log(result)
     } catch (error) {
       toast.error('error', error.data.data.message)

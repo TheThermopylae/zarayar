@@ -2,15 +2,15 @@
   <div>
     <div class="grid grid-cols-3 items-center text-xs">
       <div
-        @click=";(visible = true), (side = 'buy')"
-        class="text-center bg-white border border-stroke py-2 px-3 rounded-10 font-bold text-sm cursor-pointer text-[#96A825]"
+        @click=";(visible = true), (side = 'buy'), (value = '')"
+        class="text-center bg-white border border-stroke py-2 px-3 rounded-10 font-bold text-[16px] cursor-pointer text-[#96A825]"
       >
         <NumberFlow :value="props.data.amount" />
       </div>
       <h4 class="text-center text-graydark">{{ props.data.name }}</h4>
       <div
-        @click=";(visible = true), (side = 'sell')"
-        class="text-center bg-white border border-stroke py-2 px-3 rounded-10 font-bold text-sm cursor-pointer text-red-400"
+        @click=";(visible = true), (side = 'sell'), (value = '')"
+        class="text-center bg-white border border-stroke py-2 px-3 rounded-10 font-bold text-[16px] cursor-pointer text-red-400"
       >
         <NumberFlow :value="props.data.amount" />
       </div>
@@ -33,27 +33,52 @@
         </template>
 
         <div class="flex flex-col h-full justify-between">
-          
           <div class="mt-2 text-center">
             <p class="text-sm">
               هر مثقال طلای آبشده:
               <span :class="side == 'buy' ? 'text-cgreen' : 'text-red-400'">
                 {{ props.data.amount.toLocaleString() }}
               </span>
-              ریال
+              تومان
             </p>
           </div>
 
-          <div class="flex-grow flex flex-col justify-center items-center gap-4">
+          <div
+            class="flex-grow flex flex-col justify-center items-center gap-4"
+          >
             <div class="text-center">
-              <span class="font-bold text-3xl">{{ displayValue }}</span> 
-              <span class="mr-1">گرم</span>
+              <span class="font-bold text-3xl">{{ displayValue }}</span>
+              <span class="mr-1">{{ gramInp ? 'گرم' : 'تومان' }}</span>
             </div>
 
             <div
-              class="w-fit flex items-center gap-2 bg-[#F5F5F5] rounded-10 p-2 px-4"
+              @click="toggleMode"
+              class="w-fit flex items-center gap-2 bg-[#F5F5F5] rounded-10 p-2 px-4 cursor-pointer select-none active:bg-gray-200 transition"
             >
               <svg
+                v-if="!gramInp"
+                xmlns="http://www.w3.org/2000/svg"
+                width="25px"
+                height="24px"
+                viewBox="0 0 24 24"
+              >
+                <g
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                >
+                  <path
+                    d="M16.5 5h3.9a.6.6 0 0 1 .6.6v14.8a.6.6 0 0 1-.6.6H3.6a.6.6 0 0 1-.6-.6V5.6a.6.6 0 0 1 .6-.6h3.9"
+                  />
+                  <path
+                    d="m16.279 6.329l.205-1.23a.6.6 0 0 0 0-.198l-.206-1.23A2 2 0 0 0 14.307 2H9.694a2 2 0 0 0-1.973 1.671l-.205 1.23a.6.6 0 0 0 0 .198l.205 1.23A2 2 0 0 0 9.694 8h4.612a2 2 0 0 0 1.973-1.671M12 8l-1-2.5"
+                  />
+                </g>
+              </svg>
+              <svg
+                v-else
                 width="25"
                 height="24"
                 viewBox="0 0 25 24"
@@ -97,28 +122,14 @@
                   fill="black"
                 />
               </svg>
-              {{
-                (
-                  Math.round(
-                    props.data.amount *
-                      (1 +
-                        (props.data.profitBuy + props.data.profitBuyAdjustment) /
-                          100)
-                  ) * value
-                ).toLocaleString()
-              }}
-            </div>
 
-            <!-- <div class="flex justify-center gap-4">
-              <div class="text-sm">
-                حداقل:
-                <span class="text-cgreen">{{ props.data.minOrderQty }}</span> گرم
-              </div>
-              <div class="text-sm">
-                حداکثر:
-                <span class="text-red-400">{{ props.data.maxOrderQty }}</span> گرم
-              </div>
-            </div> -->
+              <span v-if="gramInp">
+                {{ Math.round(finalPrice).toLocaleString() }} تومان
+              </span>
+              <span v-else class="dir-ltr">
+                {{ finalWeight.toFixed(4) }} گرم
+              </span>
+            </div>
           </div>
 
           <div class="mt-auto">
@@ -154,14 +165,13 @@
                 </svg>
               </button>
             </div>
-            
+
             <Button
               pt:root="!w-full !mt-3"
               :label="side == 'buy' ? 'خرید' : 'فروش'"
               @click="showSubmit"
             />
           </div>
-
         </div>
       </Drawer>
 
@@ -180,9 +190,9 @@
             </p>
           </div>
           <div class="flex justify-between">
-            <h4>نوع معامله</h4>
+            <h4>وزن نهایی</h4>
             <span>
-              {{ value }}
+              {{ finalWeight.toFixed(4) }}
               گرم
             </span>
           </div>
@@ -196,27 +206,14 @@
             <h4>مظنه</h4>
             <span>
               {{ props.data.amount.toLocaleString() }}
-              ریال
+              تومان
             </span>
           </div>
           <div
             class="flex justify-between bg-white p-1.5 rounded-10 border border-stroke"
           >
             <h4>مبلغ کل</h4>
-            <span>
-              {{
-                (
-                  Math.round(
-                    props.data.amount *
-                      (1 +
-                        (props.data.profitBuy +
-                          props.data.profitBuyAdjustment) /
-                          100)
-                  ) * value
-                ).toLocaleString()
-              }}
-              ریال
-            </span>
+            <span>{{ Math.round(finalPrice).toLocaleString() }} تومان</span>
           </div>
         </div>
         <div class="grid grid-cols-2 gap-2 mt-2">
@@ -233,40 +230,70 @@
           />
         </div>
       </Drawer>
-      
+
       <Drawer
         v-model:visible="visibleSuccessMessage"
         position="bottom"
         style="height: auto"
       >
-          <div class="flex flex-col items-center mb-4">
-             <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M2.60425 25C2.60425 12.6311 12.6312 2.60413 25.0001 2.60413C37.369 2.60413 47.3959 12.6311 47.3959 25C47.3959 37.3688 37.369 47.3958 25.0001 47.3958C12.6312 47.3958 2.60425 37.3688 2.60425 25Z" fill="#96A825" fill-opacity="0.2"/>
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M34.4383 18.6868C35.0485 19.297 35.0485 20.2863 34.4383 20.8965L24.8003 30.5345C23.3765 31.9582 21.0681 31.9582 19.6443 30.5344L15.5619 26.452C14.9517 25.8418 14.9517 24.8525 15.5619 24.2423C16.1721 23.6321 17.1614 23.6321 17.7716 24.2423L21.854 28.3247C22.0574 28.5281 22.3872 28.5281 22.5906 28.3247L32.2286 18.6868C32.8388 18.0766 33.8281 18.0766 34.4383 18.6868Z" fill="#96A825"/>
-              </svg>
-             <p>معامله تایید شد</p>
-           </div>
-           <div class="space-y-2">
-            <div class="flex justify-between">
-                <h4>نوع معامله</h4>
-                <p><span v-text="side == 'buy' ? 'خرید' : 'فروش'" /> {{ props.data.name }}</p>
-            </div>
-            <div class="flex justify-between">
-                <h4>نوع معامله</h4>
-                <span>{{ value }} گرم</span>
-            </div>
-           </div>
-           <div class="border rounded-10 border-stroke bg-[#F9F9FA99] p-1 mt-3 space-y-1.5">
-               <div class="flex justify-between bg-white p-1.5 rounded-10 border border-stroke">
-                   <h4>مظنه</h4>
-                   <span>{{ props.data.amount.toLocaleString() }} ریال</span>
-               </div>
-               <div class="flex justify-between bg-white p-1.5 rounded-10 border border-stroke">
-                   <h4>مبلغ کل</h4>
-                   <span>{{ (Math.round(props.data.amount * (1 + (props.data.profitBuy + props.data.profitBuyAdjustment) / 100)) * value).toLocaleString() }} ریال</span>
-               </div>
-           </div>
-           <Button label="متوجه شدم" pt:root="!mt-2 w-full !bg-secondary" @click=";(visibleSuccessMessage = false), (value = '')"/>
+        <div class="flex flex-col items-center mb-4">
+          <svg
+            width="50"
+            height="50"
+            viewBox="0 0 50 50"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M2.60425 25C2.60425 12.6311 12.6312 2.60413 25.0001 2.60413C37.369 2.60413 47.3959 12.6311 47.3959 25C47.3959 37.3688 37.369 47.3958 25.0001 47.3958C12.6312 47.3958 2.60425 37.3688 2.60425 25Z"
+              fill="#96A825"
+              fill-opacity="0.2"
+            />
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M34.4383 18.6868C35.0485 19.297 35.0485 20.2863 34.4383 20.8965L24.8003 30.5345C23.3765 31.9582 21.0681 31.9582 19.6443 30.5344L15.5619 26.452C14.9517 25.8418 14.9517 24.8525 15.5619 24.2423C16.1721 23.6321 17.1614 23.6321 17.7716 24.2423L21.854 28.3247C22.0574 28.5281 22.3872 28.5281 22.5906 28.3247L32.2286 18.6868C32.8388 18.0766 33.8281 18.0766 34.4383 18.6868Z"
+              fill="#96A825"
+            />
+          </svg>
+          <p>معامله تایید شد</p>
+        </div>
+        <div class="space-y-2">
+          <div class="flex justify-between">
+            <h4>نوع معامله</h4>
+            <p>
+              <span v-text="side == 'buy' ? 'خرید' : 'فروش'" />
+              {{ props.data.name }}
+            </p>
+          </div>
+          <div class="flex justify-between">
+            <h4>نوع معامله</h4>
+            <span>{{ finalWeight.toFixed(4) }} گرم</span>
+          </div>
+        </div>
+        <div
+          class="border rounded-10 border-stroke bg-[#F9F9FA99] p-1 mt-3 space-y-1.5"
+        >
+          <div
+            class="flex justify-between bg-white p-1.5 rounded-10 border border-stroke"
+          >
+            <h4>مظنه</h4>
+            <span>{{ props.data.amount.toLocaleString() }} تومان</span>
+          </div>
+          <div
+            class="flex justify-between bg-white p-1.5 rounded-10 border border-stroke"
+          >
+            <h4>مبلغ کل</h4>
+            <span>{{ Math.round(finalPrice).toLocaleString() }} تومان</span>
+          </div>
+        </div>
+        <Button
+          label="متوجه شدم"
+          pt:root="!mt-2 w-full !bg-secondary"
+          @click=";(visibleSuccessMessage = false), (value = '')"
+        />
       </Drawer>
 
       <Drawer
@@ -276,56 +303,132 @@
         pt:header="!pb-0"
       >
         <div class="flex flex-col items-center mb-4">
-            <svg width="50" height="50" viewBox="0 0 50 50" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M2.60401 25C2.60401 12.6311 12.631 2.60419 24.9998 2.60419C37.3687 2.60419 47.3957 12.6311 47.3957 25C47.3957 37.3689 37.3687 47.3959 24.9998 47.3959C12.631 47.3959 2.60401 37.3689 2.60401 25Z" fill="#E84362" fill-opacity="0.2"/>
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M17.6452 17.6451C18.2553 17.0349 19.2447 17.035 19.8549 17.6452L32.3548 30.1451C32.9649 30.7553 32.9649 31.7447 32.3547 32.3549C31.7445 32.9651 30.7552 32.965 30.145 32.3548L17.6451 19.8548C17.035 19.2447 17.035 18.2553 17.6452 17.6451Z" fill="#E84362"/>
-                <path fill-rule="evenodd" clip-rule="evenodd" d="M32.3549 17.6452C32.9651 18.2553 32.965 19.2447 32.3549 19.8549L19.8549 32.3548C19.2447 32.9649 18.2553 32.9649 17.6451 32.3547C17.0349 31.7445 17.035 30.7552 17.6452 30.145L30.1452 17.6451C30.7553 17.0349 31.7447 17.035 32.3549 17.6452Z" fill="#E84362"/>
-            </svg>
-            <p>{{ errorMessage }}</p>
-         </div>
-         <Button label="متوجه شدم" pt:root="!mt-2 w-full !bg-secondary" @click=";(visibleErrorMessage = false), (value = '')"/>
+          <svg
+            width="50"
+            height="50"
+            viewBox="0 0 50 50"
+            fill="none"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M2.60401 25C2.60401 12.6311 12.631 2.60419 24.9998 2.60419C37.3687 2.60419 47.3957 12.6311 47.3957 25C47.3957 37.3689 37.3687 47.3959 24.9998 47.3959C12.631 47.3959 2.60401 37.3689 2.60401 25Z"
+              fill="#E84362"
+              fill-opacity="0.2"
+            />
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M17.6452 17.6451C18.2553 17.0349 19.2447 17.035 19.8549 17.6452L32.3548 30.1451C32.9649 30.7553 32.9649 31.7447 32.3547 32.3549C31.7445 32.9651 30.7552 32.965 30.145 32.3548L17.6451 19.8548C17.035 19.2447 17.035 18.2553 17.6452 17.6451Z"
+              fill="#E84362"
+            />
+            <path
+              fill-rule="evenodd"
+              clip-rule="evenodd"
+              d="M32.3549 17.6452C32.9651 18.2553 32.965 19.2447 32.3549 19.8549L19.8549 32.3548C19.2447 32.9649 18.2553 32.9649 17.6451 32.3547C17.0349 31.7445 17.035 30.7552 17.6452 30.145L30.1452 17.6451C30.7553 17.0349 31.7447 17.035 32.3549 17.6452Z"
+              fill="#E84362"
+            />
+          </svg>
+          <p>{{ errorMessage }}</p>
+        </div>
+        <Button
+          label="متوجه شدم"
+          pt:root="!mt-2 w-full !bg-secondary"
+          @click=";(visibleErrorMessage = false), (value = '')"
+        />
       </Drawer>
     </div>
   </div>
 </template>
 
 <script setup>
+import { ref, computed } from 'vue'
 import NumberFlow from '@number-flow/vue'
 
 let visible = ref(false)
 let visibleSubmit = ref(false)
-
 let visibleSuccessMessage = ref(false)
 let visibleErrorMessage = ref(false)
-
 let errorMessage = ref(null)
 
-let props = defineProps(['data'])
+// true = ورودی گرم است
+// false = ورودی مبلغ (تومان) است
+let gramInp = ref(true)
+
+let props = defineProps(['data', 'pending'])
 let emit = defineEmits(['toast', 'success'])
 
 const value = ref('')
 let side = ref('')
 
-// کلیدهای استاندارد
 const keys = [1, 2, 3, 4, 5, 6, 7, 8, 9, '.', 0]
-
 let loading = ref(false)
 
-// مقداری که نمایش داده می‌شود
-const displayValue = computed(() => value.value || '0')
+// مقدار نمایشی (عدد وارد شده با فرمت)
+const displayValue = computed(() => {
+  if (!value.value) return '0'
+  return Number(value.value).toLocaleString()
+})
+
+// محاسبه قیمت نهایی هر گرم (با کارمزد)
+const unitPrice = computed(() => {
+  const basePrice = props.data.amount || 0
+
+  // انتخاب درصد سود/زیان
+  let profitPercent = 0
+  if (side.value === 'buy') {
+    profitPercent =
+      (props.data.profitBuy || 0) + (props.data.profitBuyAdjustment || 0)
+  } else {
+    // فرض بر اینکه در آبجکت دیتای شما profitSell هم هست
+    // اگر فقط profitBuy استفاده می‌شود، این شرط را بردارید
+    profitPercent =
+      (props.data.profitSell || 0) + (props.data.profitSellAdjustment || 0)
+  }
+
+  return basePrice * (1 + profitPercent / 100)
+})
+
+// محاسبه وزن نهایی (چیزی که به سرور ارسال می‌شود و در محاسبات استفاده می‌شود)
+const finalWeight = computed(() => {
+  const val = Number(value.value) || 0
+
+  if (gramInp.value) {
+    // اگر ورودی گرم است، خود عدد وزن است
+    return val
+  } else {
+    // اگر ورودی تومان است: وزن = مبلغ / قیمت واحد
+    const price = val
+    return unitPrice.value > 0 ? price / unitPrice.value : 0
+  }
+})
+
+// محاسبه قیمت نهایی کل (تومان)
+const finalPrice = computed(() => {
+  if (!gramInp.value) {
+    // اگر ورودی تومان است، خود عدد قیمت است
+    return Number(value.value) || 0
+  } else {
+    // اگر ورودی گرم است: قیمت = وزن * قیمت واحد
+    return finalWeight.value * unitPrice.value
+  }
+})
+
+// تغییر حالت (گرم / تومان)
+function toggleMode () {
+  gramInp.value = !gramInp.value
+  value.value = '' // ریست کردن مقدار موقع تغییر حالت
+}
 
 function handleInput (input) {
-  // --- قوانین نقطه ---
+  // قوانین نقطه
   if (input === '.') {
     if (value.value === '') return
     if (value.value.includes('.')) return
   }
-
-  // --- قوانین صفر ---
-  if (input === 0) {
-    if (value.value === '0') return
-  }
-
+  // قوانین صفر
+  if (input === 0 && value.value === '0') return
   if (value.value === '0' && input !== '.' && input !== 0) {
     value.value = ''
   }
@@ -343,16 +446,20 @@ function editOrder () {
 }
 
 function showSubmit () {
-  if (
-    value.value < props.data.minOrderQty ||
-    value.value > props.data.maxOrderQty
-  )
+  // چک کردن اعتبار بر اساس وزن نهایی
+  const w = finalWeight.value
+
+  if (w <= 0) {
+    return // یا نمایش خطا
+  }
+
+  if (w < props.data.minOrderQty || w > props.data.maxOrderQty) {
     emit('toast', {
       type: 'warn',
       title: 'اخطار',
-      text: `وزن وارد شده باید بین ${props.data.minOrderQty} و ${props.data.maxOrderQty} باشد`
+      text: `وزن معامله باید بین ${props.data.minOrderQty} و ${props.data.maxOrderQty} گرم باشد`
     })
-  else {
+  } else {
     visible.value = false
     visibleSubmit.value = true
   }
@@ -368,7 +475,7 @@ async function submit () {
       body: {
         side: side.value,
         settlementType: 'cash',
-        weightGram: value.value,
+        weightGram: finalWeight.value, // همیشه وزن محاسبه شده را ارسال می‌کنیم
         currencyId: props.data._id
       }
     })

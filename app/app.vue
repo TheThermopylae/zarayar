@@ -11,20 +11,10 @@
         @enter="hideEnterAppSec = false"
       />
     </Transition>
-    <ClientOnly>
-      <Toaster
-        position="top-center"
-        dir="rtl"
-        :toastOptions="{
-          class: 'my-toast'
-        }"
-      />
-    </ClientOnly>
   </div>
 </template>
 
 <script setup>
-import 'vue-sonner/style.css'
 let { settings } = useSettings()
 let route = useRoute()
 
@@ -62,8 +52,8 @@ let hideEnterAppSec = ref(settings.value?.introPage.isActive)
   opacity: 0;
 }
 
-.my-toast {
+/* .my-toast {
   backdrop-filter: blur(5px) saturate(180%) !important;
   background-color: rgba(255, 255, 255, 0.5) !important;
-}
+} */
 </style>

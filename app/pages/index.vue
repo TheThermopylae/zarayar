@@ -32,6 +32,4 @@ let todayOrders = computed(() => {
       )
     : []
 })
-
-console.log(todayOrders.value)
 </script>
